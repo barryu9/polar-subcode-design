@@ -3,7 +3,7 @@
 Reader-oriented code for **Deterministic and Efficient Design of Dynamic Frozen
 Expressions for Polar Subcodes via Exact Low-Weight Spectrum Characterization**.
 
-Authors: Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
+Authors: Junhua You, Shaohua Wu, Aolin Liu, Yajing Deng, and Qinyu Zhang.
 
 This repository separates reusable numerical algorithms from experiment drivers.
 The five principal constructions start from **zero support**, using only the
