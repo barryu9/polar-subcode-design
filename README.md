@@ -1,7 +1,7 @@
 # Polar Subcode Design
 
-Reader-oriented code for **Dynamic Frozen Expression Design for Polar Subcodes:
-Exact Low-Weight Constraint Reduction and Deterministic Construction**.
+Reader-oriented code for **Deterministic and Efficient Design of Dynamic Frozen
+Expressions for Polar Subcodes via Exact Low-Weight Spectrum Characterization**.
 
 Authors: Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
 
