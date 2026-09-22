@@ -1,0 +1,15 @@
+{
+  "exact": true,
+  "N": 256,
+  "K": 128,
+  "cutoff": 20,
+  "method": "native",
+  "spectrum": {
+    "0": 1,
+    "20": 4042
+  },
+  "dmin": 20,
+  "distance_lower_bound": 20,
+  "word_list_complete_through_cutoff": false,
+  "zero_word_omitted_from_list": true
+}

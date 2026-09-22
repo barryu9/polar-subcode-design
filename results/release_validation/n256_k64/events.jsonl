@@ -1,0 +1,11 @@
+{"elapsed_seconds": 0.010036799998488277, "stage": "start", "message": "Start from zero support. No stored support is read.", "N": 256, "K": 64, "d_P": 32, "target": 48}
+{"elapsed_seconds": 0.015034700016258284, "stage": "domain", "message": "Release frozen rows of sufficient weight and retain the high-weight core", "N": 128, "K": 52, "d_P": 16, "target": 24, "released_rows": [39, 83, 105, 113, 114, 116, 120], "core_dimension": 29, "free_coefficients": 126}
+{"elapsed_seconds": 29.595773300010478, "stage": "directory", "message": "Enumerate the complete common mother, including words absent at zero support", "nonzero_words": 31000, "spectrum": {"0": 1, "16": 31000}}
+{"elapsed_seconds": 29.74198520000209, "stage": "support", "message": "Reject every forbidden source pattern using shared coefficients", "variables": 126, "conditions": 1686, "distinct_pairs": 2692}
+{"elapsed_seconds": 31.33366480001132, "stage": "support", "message": "All constraints in the complete directory are rejected", "nodes": 6094}
+{"elapsed_seconds": 57.00840769999195, "stage": "directory", "message": "Build projected forbidden values for the restricted outer domain", "kind": "coset_prepared", "index": 1, "total": 28, "rank": 45, "radius": 0}
+{"elapsed_seconds": 57.05121629999485, "stage": "directory", "message": "Build projected forbidden values for the restricted outer domain", "kind": "coset_prepared", "index": 17, "total": 28, "rank": 45, "radius": 0}
+{"elapsed_seconds": 57.083799300016835, "stage": "directory", "message": "Build projected forbidden values for the restricted outer domain", "kind": "coset_prepared", "index": 28, "total": 28, "rank": 45, "radius": 0}
+{"elapsed_seconds": 57.123852299991995, "stage": "support", "message": "Reject every forbidden source pattern using shared coefficients", "variables": 48, "conditions": 7, "distinct_pairs": 224}
+{"elapsed_seconds": 57.16468410001835, "stage": "support", "message": "All constraints in the complete directory are rejected", "nodes": 4}
+{"elapsed_seconds": 57.22938229999272, "stage": "verified", "message": "Rank, causality, complete low-weight exclusion and distance checked", "dmin": 48, "Admin": null}

@@ -1,0 +1,21 @@
+[    0.12s] start: Start from zero support. No stored support is read. | N=64, K=32, d_P=8, target=12
+[    0.13s] domain: Release frozen rows of sufficient weight and retain the high-weight core | N=32, K=20, d_P=4, target=6, released_rows=(14, 17, 18, 20, 24), core_dimension=15, free_coefficients=25
+[    0.14s] directory: Enumerate the complete common mother, including words absent at zero support | nonzero_words=728, spectrum={0: 1, 4: 728}
+[    0.14s] support: Reject every forbidden source pattern using shared coefficients | variables=25, conditions=19, distinct_pairs=140
+[    0.14s] support: All constraints in the complete directory are rejected | nodes=5
+[    0.15s] outer: Protect every weight below the target through exact quotient exclusions | target=12, left_cosets=92, cross_coefficients=144
+[    0.16s] outer: Solve one source column, retaining unvisited sibling prefixes | source=13, events=1, conditional_mean=17/32
+[    0.16s] outer: Solve one source column, retaining unvisited sibling prefixes | source=14, events=2, conditional_mean=11/8
+[    0.17s] outer: Solve one source column, retaining unvisited sibling prefixes | source=15, events=3, conditional_mean=61/32
+[    0.17s] outer: Solve one source column, retaining unvisited sibling prefixes | source=19, events=1, conditional_mean=21/32
+[    0.18s] outer: Solve one source column, retaining unvisited sibling prefixes | source=23, events=1, conditional_mean=21/32
+[    0.19s] outer: Solve one source column, retaining unvisited sibling prefixes | source=25, events=3, conditional_mean=63/32
+[    0.20s] outer: Solve one source column, retaining unvisited sibling prefixes | source=26, events=6, conditional_mean=117/32
+[    0.20s] outer: Solve one source column, retaining unvisited sibling prefixes | source=27, events=10, conditional_mean=209/32
+[    0.21s] outer: Solve one source column, retaining unvisited sibling prefixes | source=28, events=10, conditional_mean=171/32
+[    0.22s] outer: Solve one source column, retaining unvisited sibling prefixes | source=29, events=14, conditional_mean=251/32
+[    0.23s] outer: Solve one source column, retaining unvisited sibling prefixes | source=30, events=18, conditional_mean=335/32
+[    0.24s] outer: Solve one source column, retaining unvisited sibling prefixes | source=31, events=23, conditional_mean=111/8
+[    0.27s] enumeration: Complete dual enumeration and integer MacWilliams transform | N=32, K=20, cutoff=6, spectrum={0: 1, 6: 480}
+[    0.31s] enumeration: Disjoint left cosets counted with exact kernel multiplicities | N=64, completed=732, total=732
+[    0.32s] verified: Rank, causality, complete low-weight exclusion and distance checked | dmin=12, Admin=3280

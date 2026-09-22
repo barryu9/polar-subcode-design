@@ -1,0 +1,51 @@
+[    0.00s] start: Start from zero support. No stored support is read. | N=256, K=128, d_P=16, target=24
+[    0.01s] domain: Release frozen rows of sufficient weight and retain the high-weight core | N=128, K=89, d_P=8, target=12, released_rows=(19, 67, 97, 98, 100, 104, 112), core_dimension=64, free_coefficients=142
+[    0.87s] directory: Enumerate the complete common mother, including words absent at zero support | nonzero_words=74288, spectrum={0: 1, 8: 74288}
+[    1.17s] support: Reject every forbidden source pattern using shared coefficients | variables=142, conditions=2128, distinct_pairs=3332
+[    3.63s] support: All constraints in the complete directory are rejected | nodes=10787
+[    4.75s] outer: Protect every weight below the target through exact quotient exclusions | target=24, left_cosets=920, cross_coefficients=1521
+[    4.75s] outer: Solve one source column, retaining unvisited sibling prefixes | source=47, events=0, conditional_mean=0
+[    4.75s] outer: Solve one source column, retaining unvisited sibling prefixes | source=55, events=0, conditional_mean=0
+[    4.76s] outer: Solve one source column, retaining unvisited sibling prefixes | source=59, events=0, conditional_mean=0
+[    4.77s] outer: Solve one source column, retaining unvisited sibling prefixes | source=61, events=0, conditional_mean=0
+[    4.77s] outer: Solve one source column, retaining unvisited sibling prefixes | source=62, events=0, conditional_mean=0
+[    4.78s] outer: Solve one source column, retaining unvisited sibling prefixes | source=63, events=0, conditional_mean=0
+[    4.79s] outer: Solve one source column, retaining unvisited sibling prefixes | source=79, events=0, conditional_mean=0
+[    4.80s] outer: Solve one source column, retaining unvisited sibling prefixes | source=87, events=0, conditional_mean=0
+[    4.87s] outer: Solve one source column, retaining unvisited sibling prefixes | source=90, events=1, conditional_mean=97243/8388608
+[    4.94s] outer: Solve one source column, retaining unvisited sibling prefixes | source=91, events=1, conditional_mean=97243/8388608
+[    5.06s] outer: Solve one source column, retaining unvisited sibling prefixes | source=92, events=2, conditional_mean=94657/4194304
+[    5.18s] outer: Solve one source column, retaining unvisited sibling prefixes | source=93, events=2, conditional_mean=94657/4194304
+[    5.40s] outer: Solve one source column, retaining unvisited sibling prefixes | source=94, events=3, conditional_mean=286557/8388608
+[    5.60s] outer: Solve one source column, retaining unvisited sibling prefixes | source=95, events=3, conditional_mean=286557/8388608
+[    5.69s] outer: Solve one source column, retaining unvisited sibling prefixes | source=101, events=1, conditional_mean=182171/16777216
+[    5.81s] outer: Solve one source column, retaining unvisited sibling prefixes | source=102, events=2, conditional_mean=45943/2097152
+[    5.99s] outer: Solve one source column, retaining unvisited sibling prefixes | source=103, events=3, conditional_mean=549715/16777216
+[    6.13s] outer: Solve one source column, retaining unvisited sibling prefixes | source=105, events=2, conditional_mean=362821/16777216
+[    6.41s] outer: Solve one source column, retaining unvisited sibling prefixes | source=106, events=5, conditional_mean=459319/8388608
+[    6.84s] outer: Solve one source column, retaining unvisited sibling prefixes | source=107, events=7, conditional_mean=1281459/16777216
+[    7.43s] outer: Solve one source column, retaining unvisited sibling prefixes | source=108, events=12, conditional_mean=136961/1048576
+[    8.31s] outer: Solve one source column, retaining unvisited sibling prefixes | source=109, events=15, conditional_mean=171023/1048576
+[    9.36s] outer: Solve one source column, retaining unvisited sibling prefixes | source=110, events=19, conditional_mean=1738779/8388608
+[   10.66s] outer: Solve one source column, retaining unvisited sibling prefixes | source=111, events=22, conditional_mean=2011275/8388608
+[   11.06s] outer: Solve one source column, retaining unvisited sibling prefixes | source=113, events=4, conditional_mean=45587/1048576
+[   11.67s] outer: Solve one source column, retaining unvisited sibling prefixes | source=114, events=10, conditional_mean=1828339/16777216
+[   12.45s] outer: Solve one source column, retaining unvisited sibling prefixes | source=115, events=14, conditional_mean=2557731/16777216
+[   13.97s] outer: Solve one source column, retaining unvisited sibling prefixes | source=116, events=24, conditional_mean=4363461/16777216
+[   15.70s] outer: Solve one source column, retaining unvisited sibling prefixes | source=117, events=29, conditional_mean=329689/1048576
+[   17.94s] outer: Solve one source column, retaining unvisited sibling prefixes | source=118, events=36, conditional_mean=409959/1048576
+[   20.75s] outer: Solve one source column, retaining unvisited sibling prefixes | source=119, events=41, conditional_mean=7470907/16777216
+[   22.89s] outer: Solve one source column, retaining unvisited sibling prefixes | source=120, events=52, conditional_mean=9470373/16777216
+[   26.22s] outer: Solve one source column, retaining unvisited sibling prefixes | source=121, events=58, conditional_mean=5281293/8388608
+[   28.91s] outer: Solve one source column, retaining unvisited sibling prefixes | source=122, events=68, conditional_mean=3102959/4194304
+[   31.88s] outer: Solve one source column, retaining unvisited sibling prefixes | source=123, events=74, conditional_mean=13504049/16777216
+[   35.69s] outer: Solve one source column, retaining unvisited sibling prefixes | source=124, events=90, conditional_mean=8201919/8388608
+[   39.88s] outer: Solve one source column, retaining unvisited sibling prefixes | source=125, events=97, conditional_mean=8839111/8388608
+[   44.39s] outer: Solve one source column, retaining unvisited sibling prefixes | source=126, events=108, conditional_mean=19712845/16777216
+[   49.25s] outer: Solve one source column, retaining unvisited sibling prefixes | source=127, events=115, conditional_mean=20987229/16777216
+[   52.56s] enumeration: Complete dual enumeration and integer MacWilliams transform | N=64, K=51, cutoff=6, spectrum={0: 1, 6: 21184}
+[   62.56s] enumeration: Disjoint left cosets counted with exact kernel multiplicities | N=128, completed=89927, total=177432
+[   72.32s] enumeration: Disjoint left cosets counted with exact kernel multiplicities | N=128, completed=177432, total=177432
+[   82.34s] enumeration: Disjoint left cosets counted with exact kernel multiplicities | N=256, completed=19029, total=26392
+[   85.93s] enumeration: Disjoint left cosets counted with exact kernel multiplicities | N=256, completed=26392, total=26392
+[   85.94s] verified: Rank, causality, complete low-weight exclusion and distance checked | dmin=24, Admin=344220

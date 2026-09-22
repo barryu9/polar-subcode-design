@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.dylib
+*.dll
+*.o
+*.obj
+*.lib
+*.exp
+*.egg-info/
+.venv/
+build/
+runs/
+.pytest_cache/
+.DS_Store

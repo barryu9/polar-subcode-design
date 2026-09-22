@@ -1,0 +1,17 @@
+N = 128, K = 42, d_P = 16
+Information positions (zero based):
+31, 47, 53, 54, 55, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 83, 85, 86, 87, 89, 90, 91, 92, 93, 94, 95, 103, 107, 109, 110, 111, 115, 117, 118, 119, 121, 122, 123, 124, 125, 126, 127
+Encoding: x = u F^{tensor log2(N)} (no bit reversal)
+Dynamic frozen expressions (XOR over GF(2)):
+u[75] = u[53]
+u[99] = u[54] XOR u[58] XOR u[78] XOR u[83] XOR u[85]
+u[101] = u[57] XOR u[58] XOR u[60] XOR u[77] XOR u[89] XOR u[90]
+u[102] = u[54] XOR u[57] XOR u[77] XOR u[83] XOR u[86] XOR u[89] XOR u[92]
+u[105] = u[57] XOR u[58] XOR u[85] XOR u[86] XOR u[90]
+u[106] = u[54] XOR u[60] XOR u[77] XOR u[78] XOR u[83]
+u[108] = u[54] XOR u[57] XOR u[58] XOR u[78] XOR u[83] XOR u[86]
+u[113] = u[54] XOR u[83] XOR u[85] XOR u[86] XOR u[89] XOR u[92]
+u[114] = u[60] XOR u[77] XOR u[83] XOR u[86] XOR u[89]
+u[116] = u[58] XOR u[77] XOR u[83] XOR u[86]
+u[120] = u[77] XOR u[78] XOR u[83] XOR u[85]
+All other frozen positions are zero.

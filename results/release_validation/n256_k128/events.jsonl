@@ -1,0 +1,51 @@
+{"elapsed_seconds": 0.003648399986559525, "stage": "start", "message": "Start from zero support. No stored support is read.", "N": 256, "K": 128, "d_P": 16, "target": 24}
+{"elapsed_seconds": 0.006084499997086823, "stage": "domain", "message": "Release frozen rows of sufficient weight and retain the high-weight core", "N": 128, "K": 89, "d_P": 8, "target": 12, "released_rows": [19, 67, 97, 98, 100, 104, 112], "core_dimension": 64, "free_coefficients": 142}
+{"elapsed_seconds": 0.8736668999772519, "stage": "directory", "message": "Enumerate the complete common mother, including words absent at zero support", "nonzero_words": 74288, "spectrum": {"0": 1, "8": 74288}}
+{"elapsed_seconds": 1.1656695999845397, "stage": "support", "message": "Reject every forbidden source pattern using shared coefficients", "variables": 142, "conditions": 2128, "distinct_pairs": 3332}
+{"elapsed_seconds": 3.6276872999733314, "stage": "support", "message": "All constraints in the complete directory are rejected", "nodes": 10787}
+{"elapsed_seconds": 4.749241899990011, "stage": "outer", "message": "Protect every weight below the target through exact quotient exclusions", "target": 24, "left_cosets": 920, "cross_coefficients": 1521}
+{"elapsed_seconds": 4.7501917999761645, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 47, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.75476169999456, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 55, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.763651699991897, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 59, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.769051899987971, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 61, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.773681499995291, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 62, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.783807799976785, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 63, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.789517099998193, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 79, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.798312099999748, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 87, "events": 0, "conditional_mean": "0"}
+{"elapsed_seconds": 4.8708325999905355, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 90, "events": 1, "conditional_mean": "97243/8388608"}
+{"elapsed_seconds": 4.943713199987542, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 91, "events": 1, "conditional_mean": "97243/8388608"}
+{"elapsed_seconds": 5.0572456999798305, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 92, "events": 2, "conditional_mean": "94657/4194304"}
+{"elapsed_seconds": 5.180105399980675, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 93, "events": 2, "conditional_mean": "94657/4194304"}
+{"elapsed_seconds": 5.399928299972089, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 94, "events": 3, "conditional_mean": "286557/8388608"}
+{"elapsed_seconds": 5.598632999986876, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 95, "events": 3, "conditional_mean": "286557/8388608"}
+{"elapsed_seconds": 5.687276599986944, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 101, "events": 1, "conditional_mean": "182171/16777216"}
+{"elapsed_seconds": 5.808494199998677, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 102, "events": 2, "conditional_mean": "45943/2097152"}
+{"elapsed_seconds": 5.98543579998659, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 103, "events": 3, "conditional_mean": "549715/16777216"}
+{"elapsed_seconds": 6.125922199978959, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 105, "events": 2, "conditional_mean": "362821/16777216"}
+{"elapsed_seconds": 6.409751499973936, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 106, "events": 5, "conditional_mean": "459319/8388608"}
+{"elapsed_seconds": 6.841899799997918, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 107, "events": 7, "conditional_mean": "1281459/16777216"}
+{"elapsed_seconds": 7.4321947999997064, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 108, "events": 12, "conditional_mean": "136961/1048576"}
+{"elapsed_seconds": 8.307313999976031, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 109, "events": 15, "conditional_mean": "171023/1048576"}
+{"elapsed_seconds": 9.359130999975605, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 110, "events": 19, "conditional_mean": "1738779/8388608"}
+{"elapsed_seconds": 10.658181499980856, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 111, "events": 22, "conditional_mean": "2011275/8388608"}
+{"elapsed_seconds": 11.055044299981091, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 113, "events": 4, "conditional_mean": "45587/1048576"}
+{"elapsed_seconds": 11.670195399987279, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 114, "events": 10, "conditional_mean": "1828339/16777216"}
+{"elapsed_seconds": 12.454394699976547, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 115, "events": 14, "conditional_mean": "2557731/16777216"}
+{"elapsed_seconds": 13.968426699982956, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 116, "events": 24, "conditional_mean": "4363461/16777216"}
+{"elapsed_seconds": 15.704414799984079, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 117, "events": 29, "conditional_mean": "329689/1048576"}
+{"elapsed_seconds": 17.942020399990724, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 118, "events": 36, "conditional_mean": "409959/1048576"}
+{"elapsed_seconds": 20.74536969998735, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 119, "events": 41, "conditional_mean": "7470907/16777216"}
+{"elapsed_seconds": 22.889362599991728, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 120, "events": 52, "conditional_mean": "9470373/16777216"}
+{"elapsed_seconds": 26.21522719998029, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 121, "events": 58, "conditional_mean": "5281293/8388608"}
+{"elapsed_seconds": 28.912971999990987, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 122, "events": 68, "conditional_mean": "3102959/4194304"}
+{"elapsed_seconds": 31.879659099999117, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 123, "events": 74, "conditional_mean": "13504049/16777216"}
+{"elapsed_seconds": 35.69116139999824, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 124, "events": 90, "conditional_mean": "8201919/8388608"}
+{"elapsed_seconds": 39.8777693999873, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 125, "events": 97, "conditional_mean": "8839111/8388608"}
+{"elapsed_seconds": 44.39462099998491, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 126, "events": 108, "conditional_mean": "19712845/16777216"}
+{"elapsed_seconds": 49.25216379997437, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 127, "events": 115, "conditional_mean": "20987229/16777216"}
+{"elapsed_seconds": 52.56207609997364, "stage": "enumeration", "message": "Complete dual enumeration and integer MacWilliams transform", "N": 64, "K": 51, "cutoff": 6, "spectrum": {"0": 1, "6": 21184}}
+{"elapsed_seconds": 62.56354299999657, "stage": "enumeration", "message": "Disjoint left cosets counted with exact kernel multiplicities", "N": 128, "completed": 89927, "total": 177432}
+{"elapsed_seconds": 72.32253049997962, "stage": "enumeration", "message": "Disjoint left cosets counted with exact kernel multiplicities", "N": 128, "completed": 177432, "total": 177432}
+{"elapsed_seconds": 82.3377371999959, "stage": "enumeration", "message": "Disjoint left cosets counted with exact kernel multiplicities", "N": 256, "completed": 19029, "total": 26392}
+{"elapsed_seconds": 85.92819239999517, "stage": "enumeration", "message": "Disjoint left cosets counted with exact kernel multiplicities", "N": 256, "completed": 26392, "total": 26392}
+{"elapsed_seconds": 85.94349979999242, "stage": "verified", "message": "Rank, causality, complete low-weight exclusion and distance checked", "dmin": 24, "Admin": 344220}

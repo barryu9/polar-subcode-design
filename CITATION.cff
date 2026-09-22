@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying manuscript when using this research code."
+title: "Polar Subcode Design: Exact Low-Weight Constraint Reduction and Deterministic Construction"
+type: software
+version: 0.1.0
+authors:
+  - family-names: You
+    given-names: Junhua
+  - family-names: Wu
+    given-names: Shaohua
+  - family-names: Liu
+    given-names: Aolin
+  - family-names: Zhang
+    given-names: Qinyu
+repository-code: "https://github.com/barryu9/polar-subcode-design"
+keywords:
+  - polar subcodes
+  - dynamic frozen expressions
+  - weight spectrum
+  - deterministic construction

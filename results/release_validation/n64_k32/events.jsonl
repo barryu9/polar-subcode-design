@@ -1,0 +1,21 @@
+{"elapsed_seconds": 0.1222911000077147, "stage": "start", "message": "Start from zero support. No stored support is read.", "N": 64, "K": 32, "d_P": 8, "target": 12}
+{"elapsed_seconds": 0.1261843999964185, "stage": "domain", "message": "Release frozen rows of sufficient weight and retain the high-weight core", "N": 32, "K": 20, "d_P": 4, "target": 6, "released_rows": [14, 17, 18, 20, 24], "core_dimension": 15, "free_coefficients": 25}
+{"elapsed_seconds": 0.13507610000669956, "stage": "directory", "message": "Enumerate the complete common mother, including words absent at zero support", "nonzero_words": 728, "spectrum": {"0": 1, "4": 728}}
+{"elapsed_seconds": 0.13704739999957383, "stage": "support", "message": "Reject every forbidden source pattern using shared coefficients", "variables": 25, "conditions": 19, "distinct_pairs": 140}
+{"elapsed_seconds": 0.1408623000024818, "stage": "support", "message": "All constraints in the complete directory are rejected", "nodes": 5}
+{"elapsed_seconds": 0.14991499998723157, "stage": "outer", "message": "Protect every weight below the target through exact quotient exclusions", "target": 12, "left_cosets": 92, "cross_coefficients": 144}
+{"elapsed_seconds": 0.15572619999875315, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 13, "events": 1, "conditional_mean": "17/32"}
+{"elapsed_seconds": 0.16329389999737032, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 14, "events": 2, "conditional_mean": "11/8"}
+{"elapsed_seconds": 0.1676848999923095, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 15, "events": 3, "conditional_mean": "61/32"}
+{"elapsed_seconds": 0.17225100001087412, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 19, "events": 1, "conditional_mean": "21/32"}
+{"elapsed_seconds": 0.18269849999342114, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 23, "events": 1, "conditional_mean": "21/32"}
+{"elapsed_seconds": 0.1878593000001274, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 25, "events": 3, "conditional_mean": "63/32"}
+{"elapsed_seconds": 0.19600269998773, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 26, "events": 6, "conditional_mean": "117/32"}
+{"elapsed_seconds": 0.20201390000875108, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 27, "events": 10, "conditional_mean": "209/32"}
+{"elapsed_seconds": 0.21075470000505447, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 28, "events": 10, "conditional_mean": "171/32"}
+{"elapsed_seconds": 0.22048349998658523, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 29, "events": 14, "conditional_mean": "251/32"}
+{"elapsed_seconds": 0.23141810001106933, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 30, "events": 18, "conditional_mean": "335/32"}
+{"elapsed_seconds": 0.2395494999946095, "stage": "outer", "message": "Solve one source column, retaining unvisited sibling prefixes", "source": 31, "events": 23, "conditional_mean": "111/8"}
+{"elapsed_seconds": 0.2707767999963835, "stage": "enumeration", "message": "Complete dual enumeration and integer MacWilliams transform", "N": 32, "K": 20, "cutoff": 6, "spectrum": {"0": 1, "6": 480}}
+{"elapsed_seconds": 0.3149365000135731, "stage": "enumeration", "message": "Disjoint left cosets counted with exact kernel multiplicities", "N": 64, "completed": 732, "total": 732}
+{"elapsed_seconds": 0.32112619999679737, "stage": "verified", "message": "Rank, causality, complete low-weight exclusion and distance checked", "dmin": 12, "Admin": 3280}

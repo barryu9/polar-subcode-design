@@ -1,0 +1,82 @@
+{
+  "cases": [
+    {
+      "N": 64,
+      "K": 32,
+      "dmin": 12,
+      "Admin": 3280,
+      "construction_and_distance_seconds": 0.2748765000142157,
+      "extra_coefficient_seconds": 0,
+      "total_seconds": 0.2748765000142157,
+      "coefficient_included": true,
+      "support_reproduced": true,
+      "d_P": 8,
+      "coefficient_counted": true
+    },
+    {
+      "N": 128,
+      "K": 42,
+      "dmin": 28,
+      "Admin": 16128,
+      "construction_and_distance_seconds": 12.692975299985847,
+      "extra_coefficient_seconds": 0,
+      "total_seconds": 12.692975299985847,
+      "coefficient_included": true,
+      "support_reproduced": true,
+      "right_seconds": 3.646444899990456,
+      "outer_seconds": 9.04653039999539,
+      "d_P": 16,
+      "coefficient_counted": true
+    },
+    {
+      "N": 256,
+      "K": 64,
+      "dmin": 48,
+      "Admin": null,
+      "d_P": 32,
+      "construction_and_distance_seconds": 28.029185199993663,
+      "extra_coefficient_seconds": null,
+      "total_seconds": 28.029185199993663,
+      "coefficient_counted": false
+    },
+    {
+      "N": 256,
+      "K": 128,
+      "dmin": 24,
+      "Admin": 344220,
+      "construction_and_distance_seconds": 62.374034799984656,
+      "extra_coefficient_seconds": 41.66646639999817,
+      "total_seconds": 104.04050119998283,
+      "coefficient_included": false,
+      "support_reproduced": true,
+      "right_nodes": 10787,
+      "outer_nodes": 1560,
+      "d_P": 16,
+      "coefficient_counted": true
+    },
+    {
+      "N": 256,
+      "K": 171,
+      "dmin": 12,
+      "Admin": 19456,
+      "d_P": 8,
+      "construction_and_distance_seconds": 3.4177111000171863,
+      "extra_coefficient_seconds": 0,
+      "total_seconds": 3.4177111000171863,
+      "coefficient_counted": true
+    }
+  ],
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700K",
+    "physical_cores": 12,
+    "logical_processors": 20,
+    "reported_clock_mhz": 3600,
+    "installed_memory_bytes": 34359738368,
+    "os": "Microsoft Windows 11 \u4e13\u4e1a\u7248",
+    "os_version": "10.0.26300",
+    "python": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "torch_threads": 1
+  },
+  "timing_scope": "Historical author-machine measurements, not fresh repository benchmarks."
+}

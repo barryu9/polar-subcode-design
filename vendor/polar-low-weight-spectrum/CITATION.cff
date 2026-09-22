@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "Please cite this software and the accompanying research manuscript. Publication details will be added when available."
+type: software
+title: "Polar Low-Weight Spectrum: Algorithm 1 Reference Implementations"
+version: 0.1.0
+date-released: 2026-09-07
+license: MIT
+authors:
+  - family-names: You
+    given-names: Junhua
+  - family-names: Wu
+    given-names: Shaohua
+  - family-names: Deng
+    given-names: Yajing
+  - family-names: Cheng
+    given-names: Nan
+  - family-names: Zhang
+    given-names: Qinyu
+preferred-citation:
+  type: unpublished
+  title: "Deterministic Low-Weight Spectrum Computation of Polar Subcodes via Affine Coset Counting"
+  year: 2026
+  authors:
+    - family-names: You
+      given-names: Junhua
+    - family-names: Wu
+      given-names: Shaohua
+    - family-names: Deng
+      given-names: Yajing
+    - family-names: Cheng
+      given-names: Nan
+    - family-names: Zhang
+      given-names: Qinyu
