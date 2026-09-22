@@ -927,6 +927,9 @@ PyObject *decode_full_pxb(PyObject *, PyObject *args) {
     PyArrayObject *first_loss_array = nullptr;
     PyArrayObject *steps_array = nullptr;
     PyArrayObject *decoded_array = nullptr;
+    int n = 0;
+    npy_intp M = 0;
+    npy_intp expression_width = 0;
 
     lambda_array = reinterpret_cast<PyArrayObject *>(PyArray_FROM_OTF(
         lambda_obj, NPY_INT64, NPY_ARRAY_IN_ARRAY
@@ -953,7 +956,6 @@ PyObject *decode_full_pxb(PyObject *, PyObject *args) {
         goto full_fail;
     }
 
-    int n = 0;
     while ((1 << n) < N) {
         ++n;
     }
@@ -962,9 +964,9 @@ PyObject *decode_full_pxb(PyObject *, PyObject *args) {
         goto full_fail;
     }
 
-    const npy_intp M = PyArray_NDIM(llr_array) == 2
+    M = PyArray_NDIM(llr_array) == 2
         ? PyArray_DIM(llr_array, 0) : 0;
-    const npy_intp expression_width = PyArray_NDIM(expression_array) == 2
+    expression_width = PyArray_NDIM(expression_array) == 2
         ? PyArray_DIM(expression_array, 1) : 0;
     if (PyArray_NDIM(lambda_array) != 1 || PyArray_DIM(lambda_array, 0) < n + 1 ||
         PyArray_NDIM(llr_layer_array) != 1 || PyArray_DIM(llr_layer_array, 0) != N ||
@@ -1247,6 +1249,10 @@ PyObject *decode_prefix_list_pxb(PyObject *, PyObject *args) {
     PyArrayObject *u_paths_array = nullptr;
     PyArrayObject *pm_paths_array = nullptr;
     PyArrayObject *active_array = nullptr;
+    int n = 0;
+    npy_intp expression_width = 0;
+    const std::int8_t *actions_data = nullptr;
+    const std::int64_t *expression_data = nullptr;
 
     lambda_array = reinterpret_cast<PyArrayObject *>(PyArray_FROM_OTF(
         lambda_obj, NPY_INT64, NPY_ARRAY_IN_ARRAY
@@ -1273,7 +1279,6 @@ PyObject *decode_prefix_list_pxb(PyObject *, PyObject *args) {
         goto prefix_fail;
     }
 
-    int n = 0;
     while ((1 << n) < N) {
         ++n;
     }
@@ -1293,11 +1298,11 @@ PyObject *decode_prefix_list_pxb(PyObject *, PyObject *args) {
         goto prefix_fail;
     }
 
-    const npy_intp expression_width = PyArray_DIM(expression_array, 1);
-    const auto *actions_data = reinterpret_cast<const std::int8_t *>(
+    expression_width = PyArray_DIM(expression_array, 1);
+    actions_data = reinterpret_cast<const std::int8_t *>(
         PyArray_DATA(actions_array)
     );
-    const auto *expression_data = reinterpret_cast<const std::int64_t *>(
+    expression_data = reinterpret_cast<const std::int64_t *>(
         PyArray_DATA(expression_array)
     );
     for (int phi = 0; phi < N; ++phi) {

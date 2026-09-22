@@ -33,7 +33,7 @@ test_lossless_masks_and_canonical_equations (test_reader_api.ReaderTests.test_lo
 test_simulation_batch_size_does_not_change_noise_or_counts (test_reader_api.ReaderTests.test_simulation_batch_size_does_not_change_noise_or_counts) ... [    0.00s] simulation: Compare the actual decoded information bits with transmitted bits | EbN0_dB=0, L=4, frames=25, backend=numpy
 [    0.04s] simulation: Measured errors with uncertainty, zero errors do not mean zero FER | frames=25, errors=7, FER=0.28, interval=[0.14283853850956563, 0.47576605190361576]
 [    0.00s] simulation: Compare the actual decoded information bits with transmitted bits | EbN0_dB=0, L=4, frames=25, backend=numpy
-[    0.01s] simulation: Measured errors with uncertainty, zero errors do not mean zero FER | frames=25, errors=7, FER=0.28, interval=[0.14283853850956563, 0.47576605190361576]
+[    0.02s] simulation: Measured errors with uncertainty, zero errors do not mean zero FER | frames=25, errors=7, FER=0.28, interval=[0.14283853850956563, 0.47576605190361576]
 ok
 test_source_pattern_solver_matches_all_small_assignments (test_reader_api.ReaderTests.test_source_pattern_solver_matches_all_small_assignments) ... ok
 test_unrestricted_support_size_and_nonzero_messages (test_reader_api.ReaderTests.test_unrestricted_support_size_and_nonzero_messages) ... ok
@@ -65,6 +65,6 @@ test_exact_target_requires_a_retained_word (test_target_distance_theory.TargetDi
 test_projection_and_every_cutoff_across_lengths_and_profiles (test_target_distance_theory.TargetDistanceTheoryTests.test_projection_and_every_cutoff_across_lengths_and_profiles) ... ok
 
 ----------------------------------------------------------------------
-Ran 61 tests in 1.884s
+Ran 61 tests in 1.899s
 
 OK

@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-09-22T03:28:31.905513+00:00",
+  "created_utc": "2026-09-22T03:31:08.468443+00:00",
   "hardware": {
     "cpu": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel",
     "logical_processors": 20,
@@ -68,7 +68,7 @@
     "cpp/block_neighborhood_kernel.cpp": "1527ddb38beba6b484b2c93ffca07772ce3ddd7e3a776900f6135694cd932304",
     "cpp/candidate_block_neighborhood_kernel.cpp": "ab945b04238d922b3b7ff7f02af27942f0137a212e926fdb27d83d416498d0a7",
     "cpp/row_neighborhood_kernel.cpp": "54f63cd9bd464f6920c7bbd438bf156a07a7800a1797dbd0fce678b3265f5ae4",
-    "cpp/scl_step_decoder_cpp.cpp": "be76d40b90f60134afe2cb3e804cd81f625fed722fee3401ef449f03ac2f9f3f",
+    "cpp/scl_step_decoder_cpp.cpp": "952d1e1b5f216a7afce4bfc93873eca0ba395f61b138fd7a70babecf89593511",
     "examples/_entry.py": "4a0996b751f98e2de05c5a92da386504eaae0b3edf5d1a0ac4578cd128985b13",
     "examples/enumeration_comparison.py": "ba6b9b64a16a0f706bdedeb9962c5a4ac4f12d1f4a4f322f35f332691b5a10ee",
     "examples/intermediate_distance.py": "b799a0ecc63b7d7ed5950bf518abce652784990998bc36e7492211537bdba4a9",

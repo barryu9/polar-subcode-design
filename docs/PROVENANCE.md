@@ -30,6 +30,8 @@ cleaned implementation.
   the dense Boolean table. This is essential for the N256/K64 design.
 - Added checked enumeration resource limits and independent spectrum comparisons.
 - Corrected equal-metric SCL pruning in both backends, documented separately.
+- Made native SCL error cleanup conform to standard C++ declaration rules for
+  GCC as well as MSVC.
 - Retained the original five canonical supports unchanged and compared fresh
   outputs with them after construction.
 
