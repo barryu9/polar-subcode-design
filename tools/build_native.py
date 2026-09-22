@@ -27,8 +27,15 @@ def main():
     command = [compiler,'-O3','-DNDEBUG','-std=c++17','-shared',
                str(ROOT/'cpp/candidate_block_neighborhood_kernel.cpp'),
                '-o',str(folder/('polar_subcodes'+suffix))]
-    command += ['-static-libgcc','-static-libstdc++'] if os.name == 'nt' else ['-fPIC']
+    # MinGW thread runtimes must not become undeclared DLL dependencies.
+    command += ['-static','-static-libgcc','-static-libstdc++'] if os.name == 'nt' else ['-fPIC']
+    print(f'Building spectrum library with {compiler}', flush=True)
     subprocess.run(command, check=True)
+    subprocess.run([sys.executable, '-c',
+        'import ctypes, sys; library = ctypes.CDLL(sys.argv[1]); '
+        'assert hasattr(library, "polar_spectrum_compute"); '
+        'assert hasattr(library, "block_neighborhood")',
+        str(folder/('polar_subcodes'+suffix))], check=True)
     print('Built exact spectrum and complete-word kernels.')
     if args.scl:
         subprocess.run([sys.executable,str(ROOT/'tools/setup_scl.py'),'build_ext','--inplace'],

@@ -23,6 +23,7 @@ cleaned implementation.
 - Removed imports of learning environments, historical search drivers and
   manuscript formatting tests. No PyTorch or Z3 is needed by these examples.
 - Replaced machine-specific DLL loading with local portable builds.
+- Linked MinGW runtimes statically and checked actual library loading during builds.
 - Added a validated lossless profile/support interchange format.
 - Unified zero-support drivers, progress logs, exception handling and custom inputs.
 - Generalized nested cross-only domains by split structure instead of a fixed length.
