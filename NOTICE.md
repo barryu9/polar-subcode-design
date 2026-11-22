@@ -1,11 +1,16 @@
 # Notices
 
-Author research code: Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
+The accompanying manuscript is by Junhua You, Shaohua Wu, Aolin Liu,
+Yajing Deng, and Qinyu Zhang. The earlier reader release credited its author
+research code to Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
 No public license for the newly organized author code has been selected.
 
 The bundled dependency in `vendor/polar-low-weight-spectrum` is distributed
 under its own MIT license. Its copyright and permission notice are preserved
 in `vendor/polar-low-weight-spectrum/LICENSE`.
 
-Code and reports provide research implementations, not guarantees of universal
-feasibility, polynomial complexity, or decoder error performance.
+This release makes the kernel's bit-set capacity configurable for length-1024
+queries and retains its original default. The packed numerical matrices in
+`reproduction/reference_inputs/` represent comparison codes specified by
+Miloslavskaya and coauthors. Their original filenames and hashes accompany
+the data. See the paper references in README.md.

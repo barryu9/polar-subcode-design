@@ -1,4 +1,7 @@
-# Reader Release Validation
+# Earlier Five-Case Release Validation
+
+For the r112 manuscript, use [the paper guide](../README.md) and
+`python -m reproduction check`.
 
 The five examples were run sequentially from zero support in the independent
 reader repository. No answer was opened until each construction and its exact

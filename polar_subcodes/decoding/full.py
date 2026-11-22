@@ -169,6 +169,7 @@ def _decode_numpy(
     early_stop: bool,
     terminal_margin: float,
     return_decoded_u: bool,
+    return_list: bool = False,
 ):
     """Decode a fixed path without calling the step-decoder entry point."""
     B, N = llr.shape
@@ -249,6 +250,9 @@ def _decode_numpy(
         if early_stop:
             active[lost_now] = False
 
+    if return_list:
+        # Keep every surviving candidate for terminal CRC selection.
+        return u.transpose(0, 2, 1), pm, active
     completed = steps == N
     final_failed = np.zeros(B, dtype=bool)
     if np.any(completed):

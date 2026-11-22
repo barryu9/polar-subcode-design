@@ -6,6 +6,7 @@ import sys
 import time
 
 from polar_subcodes.code import load_code
+from polar_subcodes.codec import load_codec
 from polar_subcodes.io import ROOT, write_json
 
 
@@ -13,7 +14,7 @@ def parser():
     p = argparse.ArgumentParser(description=__doc__,epilog='See README.md and docs/ for custom profiles and support conventions.')
     commands = p.add_subparsers(dest='command',required=True)
     commands.add_parser('examples',help='List all experiment and utility entry points')
-    r = commands.add_parser('reproduce',help='Rebuild a paper profile from zero support')
+    r = commands.add_parser('reproduce',help='Run a legacy construction; see reproduction/ for Section VI')
     from polar_subcodes.experiments.reproduce import CASES
     r.add_argument('case',choices=[*CASES,'all'])
     r.add_argument('--output',type=Path)
@@ -66,7 +67,15 @@ def parser():
 def main(argv=None):
     args = parser().parse_args(argv)
     if args.command=='examples':
-        print('''python examples/n64_k32.py
+        print('''Manuscript r112 (start here)
+python -m paper_examples all
+python -m theory.check_results
+python -m reproduction list
+python -m reproduction check
+python -m reproduction construct --cases n64_k32 --output runs/fig5
+
+Earlier five-case release and general utilities
+python examples/n64_k32.py
 python examples/n128_k42.py
 python examples/n256_k64.py
 python examples/n256_k128.py
@@ -102,17 +111,22 @@ python main.py verify-theory''')
             else:
                 reproduce(args.case,args.output,limits)
     elif args.command=='inspect':
-        description = load_code(args.input).describe(args.include_static)
+        codec = load_codec(args.input)
+        description = codec.mother.describe(args.include_static)
+        if codec.polynomial is not None:
+            description += f'\nCRC polynomial {codec.polynomial:#x}, payload {codec.payload} bits.'
+        if codec.taps:
+            description += f'\nPAC taps in increasing delay order: {list(codec.taps)}.'
         print(description)
         if args.output:
             args.output.parent.mkdir(parents=True,exist_ok=True)
             args.output.write_text(description+'\n',encoding='utf-8')
     elif args.command=='enumerate':
         from polar_subcodes.spectrum.api import enumerate_code
-        enumerate_code(load_code(args.support),args.cutoff,args.output,args.method,args.work)
+        enumerate_code(load_codec(args.support).as_subcode(),args.cutoff,args.output,args.method,args.work)
     elif args.command=='simulate':
         from polar_subcodes.decoding.simulation import simulate
-        simulate(load_code(args.support),args.output,args.snr,args.frames,args.list_size,
+        simulate(load_codec(args.support),args.output,args.snr,args.frames,args.list_size,
                  args.batch_size,args.seed,args.backend,args.messages)
     elif args.command=='verify-theory':
         import unittest

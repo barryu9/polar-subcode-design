@@ -376,6 +376,15 @@ void decode_row(
         }
 
         const int middle = std::max(1, std::min(2 * active_count, L));
+#ifdef POLAR_PAPER_REPLAY_TIES
+        // Preserve the threshold convention used on the archived design noise frames.
+        std::vector<double> sorted = pm_pair;
+        std::sort(sorted.begin(), sorted.end());
+        const double pm_cv = sorted[middle - 1];
+        for (int candidate = 0; candidate < 2 * L; ++candidate) {
+            compare[candidate] = pm_pair[candidate] <= pm_cv;
+        }
+#else
         // Select exactly the list capacity, including deterministic metric ties.
         std::vector<int> ordered(static_cast<std::size_t>(2 * L));
         for (int candidate = 0; candidate < 2 * L; ++candidate) {
@@ -388,6 +397,7 @@ void decode_row(
         for (int index = 0; index < middle; ++index) {
             compare[ordered[index]] = true;
         }
+#endif
         if (active_count == 0) {
             std::fill(compare.begin(), compare.end(), false);
         }

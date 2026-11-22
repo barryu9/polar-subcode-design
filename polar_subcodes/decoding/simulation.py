@@ -4,7 +4,8 @@ import time
 import numpy as np
 
 from polar_subcodes.io import Progress, write_json, hardware
-from .scl import decode, full_scl_backend_name
+from ..codec import PayloadCodec
+from .scl import full_scl_backend_name
 
 
 def wilson(errors,frames):
@@ -19,7 +20,9 @@ def wilson(errors,frames):
 
 def simulate(code,output,ebn0_db=3.0,frames=1000,list_size=64,batch_size=32,
              seed=2026,backend='auto',messages='zero'):
-    if not 0<code.k<=code.n or type(frames) is not int or frames<1 or batch_size<1:
+    codec = code if isinstance(code, PayloadCodec) else PayloadCodec(code)
+    n, payload = codec.mother.n, codec.payload
+    if not 0<payload<=n or type(frames) is not int or frames<1 or batch_size<1:
         raise ValueError('Positive K, frames and batch size are required')
     if not math.isfinite(ebn0_db) or messages not in ('zero','random'):
         raise ValueError('Use a finite Eb/N0 and zero or random messages')
@@ -29,12 +32,12 @@ def simulate(code,output,ebn0_db=3.0,frames=1000,list_size=64,batch_size=32,
     noise_seed,message_seed = np.random.SeedSequence(seed).spawn(2)
     noise_rng = np.random.default_rng(noise_seed)
     message_rng = np.random.default_rng(message_seed)
-    variance = 1/(2*(code.k/code.n)*10**(ebn0_db/10))
-    write_json(emit.folder/'support.json',code.as_dict())
-    write_json(emit.folder/'configuration.json',dict(N=code.n,K=code.k,ebn0_db=ebn0_db,
+    variance = 1/(2*(payload/n)*10**(ebn0_db/10))
+    write_json(emit.folder/'support.json',codec.as_dict())
+    write_json(emit.folder/'configuration.json',dict(N=n,K=payload,mother_dimension=codec.mother.k,ebn0_db=ebn0_db,
         noise_variance=variance,frames=frames,list_size=list_size,batch_size=batch_size,
         seed=seed,backend=full_scl_backend_name(backend),messages=messages,
-        channel='BPSK AWGN, sigma^2=1/(2 R Eb/N0)',decoder='min-sum SCL, no CRC',
+        channel='BPSK AWGN, sigma^2=1/(2 R Eb/N0)',decoder='min-sum CA-SCL' if codec.polynomial else 'min-sum SCL',
         stopping_rule='fixed number of frames',hardware=hardware()))
     completed = errors = bit_errors = 0
     last = time.perf_counter()
@@ -43,22 +46,22 @@ def simulate(code,output,ebn0_db=3.0,frames=1000,list_size=64,batch_size=32,
     while completed<frames:
         batch = min(batch_size,frames-completed)
         # Separate streams make noise independent of the message-generation option.
-        bits = (message_rng.random((batch,code.k))<0.5).astype(np.int8) if messages=='random' else np.zeros((batch,code.k),dtype=np.int8)
+        bits = (message_rng.random((batch,payload))<0.5).astype(np.int8) if messages=='random' else np.zeros((batch,payload),dtype=np.int8)
         if messages=='zero':
-            transmitted = np.zeros((batch,code.n),dtype=np.int8)
+            transmitted = np.zeros((batch,n),dtype=np.int8)
         else:
-            encoded = [code.encode(sum(int(bit)<<q for q,bit in enumerate(row))) for row in bits]
-            transmitted = np.array([[(x>>i)&1 for i in range(code.n)] for x in encoded],dtype=np.int8)
-        received = 1-2*transmitted+noise_rng.normal(0,math.sqrt(variance),(batch,code.n))
-        decoded = decode(code,2*received/variance,list_size,backend)
-        bad = decoded[:,code.profile]!=bits
-        errors += int(np.count_nonzero(np.any(bad,axis=1)))
+            encoded = [codec.encode(sum(int(bit)<<q for q,bit in enumerate(row))) for row in bits]
+            transmitted = np.array([[(x>>i)&1 for i in range(n)] for x in encoded],dtype=np.int8)
+        received = 1-2*transmitted+noise_rng.normal(0,math.sqrt(variance),(batch,n))
+        decoded, valid = codec.decode_with_status(2*received/variance,list_size,backend)
+        bad = np.array([[(x>>i)&1 for i in range(payload)] for x in decoded]) != bits
+        errors += int(np.count_nonzero(~valid | np.any(bad,axis=1)))
         bit_errors += int(np.count_nonzero(bad))
         completed += batch
         now = time.perf_counter()
         if completed==frames or now-last>=5:
             report = dict(frames=completed,frame_errors=errors,FER=errors/completed,
-                          information_bit_errors=bit_errors,BER=bit_errors/(completed*code.k),
+                          information_bit_errors=bit_errors,BER=bit_errors/(completed*payload),
                           FER_95_percent_interval=wilson(errors,completed),
                           seconds=now-emit.start,complete=completed==frames)
             write_json(emit.folder/'report.json',report)

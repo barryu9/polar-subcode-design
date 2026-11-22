@@ -1,4 +1,6 @@
-# Experiment and Verification Map
+# Earlier Five-Case Experiment and Verification Map
+
+For the codes used in r112 Figs. 5–10, see the [curve configurations](../configs/README.md).
 
 | Task | Entry point | Required inputs | Output / meaning |
 |---|---|---|---|

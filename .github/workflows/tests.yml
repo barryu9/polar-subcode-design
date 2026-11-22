@@ -19,4 +19,7 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - run: python tools/build_native.py --scl
       - run: python main.py verify-theory
+      - run: python -m theory.check_results
+      - run: python -m paper_examples all
+      - run: python -m reproduction check
       - run: python examples/n64_k32.py --output runs/ci_n64

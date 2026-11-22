@@ -44,5 +44,7 @@ attributed ingredients. The files implement their use in this support-design
 framework. See the accompanying manuscript and the dependency's documentation
 for the corresponding mathematical references.
 
-The main author code has no public redistribution license selected yet. The
-repository is private. This does not alter the vendor's MIT terms.
+The original author code and the vendor dependency have separate terms.
+See the current [notice](../NOTICE.md). The source manifest in this directory
+describes the earlier five-case release. The r112 curve manifests are under
+[`configs/`](../configs/README.md).

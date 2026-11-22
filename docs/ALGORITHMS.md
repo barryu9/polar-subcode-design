@@ -1,5 +1,8 @@
 # Algorithms and Implementation Scope
 
+This page describes the numerical components of the earlier reader release.
+The [numbered algorithm guide](../algorithms/README.md) follows the r112 manuscript.
+
 ## Common-Mother Rejection
 
 `construction/source_patterns.py` retains shared source variables. For each

@@ -4,7 +4,7 @@ extern "C" PS_EXPORT char* block_neighborhood(int n,const uint8_t*info,const uin
                      const uint8_t*removed,int cutoff,uint64_t limit) {
     std::string result;
     try {
-        if(n<4||n>256||(n&(n-1))||!info||!supports||!removed||cutoff<1||cutoff>n||!limit)
+        if(n<4||n>ps::capacity||(n&(n-1))||!info||!supports||!removed||cutoff<1||cutoff>n||!limit)
             throw std::invalid_argument("Invalid block-neighborhood input");
         std::vector<ps::Bits> checks,removed_checks;int dimension=0;
         for(int j=0;j<n;++j){

@@ -7,8 +7,11 @@ path index. Dynamic frozen bits are computed independently on each path.
 
 The public `decode` API disables all-zero-path early termination and returns
 the actual selected polar input. It therefore works for nonzero messages.
-The simulator compares these decoded information bits against the transmitted
-bits. It does not use path survival as a substitute for frame error rate.
+For the experiment configs, `load_codec` decodes the payload, including
+the inverse convolution for PAC. CA-SCL branches on all mother information
+positions and selects the minimum-metric valid terminal path. If none passes
+the CRC, the frame counts as an error. Bit-error accounting then uses the
+minimum-metric candidate. Both backends use the same terminal rule.
 
 ## Reader-Release Correction
 
@@ -19,10 +22,9 @@ exposed this during extraction. Both backends in this repository now use stable
 top-L selection. The regression includes that exact case, noisy backend agreement,
 tiny-code full-list/ML agreement, and supports referencing more than three bits.
 
-This correction is local to this reader repository. Original workspace files
-and earlier FER results have not been changed. Old FER curves should not be
-treated as newly validated by this packaging task. The distance/spectrum
-construction results do not use the SCL decoder and are unaffected.
+The general reader decoder uses the corrected top-L tie rule. The historical
+design-frame replay has a separate build of its original tie rule to regenerate
+the expression choices used in the plots.
 
 ## Statistical Convention
 
@@ -32,4 +34,5 @@ and random messages. The frame count is fixed, so the reported Wilson interval
 has its usual fixed-sample interpretation. Zero measured errors give a positive
 upper interval endpoint, not a zero-FER guarantee.
 
-No CRC, adaptive stopping, GPU, or fast-node approximations are implicitly added.
+The plotted frame/error counts and the paired path-loss measurements are
+available in [the r112 data directory](../results/paper_r112/README.md).

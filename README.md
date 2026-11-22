@@ -1,199 +1,109 @@
-# Polar Subcode Design
+# Deterministic Polar Subcode Design via Exact Low-Weight Spectrum Characterization
 
-Reader-oriented code for **Deterministic and Efficient Design of Dynamic Frozen
-Expressions for Polar Subcodes via Exact Low-Weight Spectrum Characterization**.
+**English** · [简体中文](README.zh-CN.md)
 
-Authors: Junhua You, Shaohua Wu, Aolin Liu, Yajing Deng, and Qinyu Zhang.
+**Junhua You, Shaohua Wu, Aolin Liu, Yajing Deng, and Qinyu Zhang** · Manuscript r112
 
-This repository separates reusable numerical algorithms from experiment drivers.
-The five principal constructions start from **zero support**, using only the
-information set. Archived answers are checked only after the search finishes.
-No trained model, reference precoder, GPU, or original research workspace is needed.
+This repository accompanies the paper. To see how the method works, run Examples 3 and 4 on the same length-16 code. Example 3 enumerates the low-weight words directly. Example 4 shows how polar projection recovers the same exclusion conditions. To check a simulation curve, look it up by figure, legend and decoder list size, then inspect its frozen expressions or rebuild it from its construction inputs.
 
-## Quick Start
+## Quick start
 
-Python 3.10 or newer, NumPy, and a C++17 compiler are required for the fast
-construction examples. Python 3.12 is the tested interpreter. Matplotlib is
-used only for plots. Setuptools builds the optional native SCL decoder.
+Run the commands from the repository root with Python 3.12. The walkthrough uses Python and NumPy. The larger constructions, native enumerator and accelerated decoder require a C++17 compiler. On Windows, use MinGW for enumeration and Microsoft C++ Build Tools for the SCL extension. On Linux use GCC, and on macOS use Clang.
 
 ```bash
 python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
+# Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+python -m paper_examples 3
+python -m paper_examples 4
+python -m reproduction list
+python -m reproduction check
+python -m reproduction.table_ii_values
+```
+
+## Read alongside the paper
+
+| Paper | Entry point | What to inspect |
+|---|---|---|
+| Algorithms 1–4 | [Algorithm guide](algorithms/README.md) | Recursive enumeration, source-wise completion, fixed-profile search and information-set exchanges. Follow an unresolved suffix from Algorithm 3 into Algorithm 4. |
+| Examples 1–6 | [Example guide](paper_examples/README.md) · `python -m paper_examples 5` | Reproduce the length-16 hand calculations, the projection ranks and the recovery of the four feasible coefficient configurations. |
+| Example 7 | `python -m paper_examples 7` | Compare the source-wise counting bound with the exact count for the length-32 example. |
+| Examples 8–9 | `python -m paper_examples 8` · `python -m paper_examples 9` | Follow fixed-profile construction and information-set exchanges at length 256. Example 8 uses a different information set from Fig. 8. Example 9 constructs the Proposed code in Fig. 7. The example guide gives the commands to rebuild both and verify their spectra. |
+| Theorems 1–3, Propositions 1–3 and Corollaries 1–2 | [Theory checks](theory/README.md) · `python -m theory.check_results` | Follow eight proof arguments through exact calculations on finite examples. |
+| Section VI, Figs. 5–10 and Tables II–III | [Configurations](configs/README.md) · [Measurements](results/paper_r112/README.md) | Match each curve to its information set, frozen expressions, decoder list size and measured frame error rate (FER). |
+
+```bash
+python -m algorithms.algorithm1_directory
+python -m algorithms.algorithm2_outer
+python -m algorithms.algorithm3_fixed_profile
+python -m algorithms.algorithm4_profiles
+python -m paper_examples all
+python -m theory.check_results theorem2 proposition3
+```
+
+## Rebuild the simulation codes
+
+The last command below constructs all **30 codes** in Figs. 5–10 in a new output directory. To reproduce just one curve, select its case ID with `--cases`. Use `python -m reproduction list` to see the available IDs.
+
+```bash
+python -m pip install -r reproduction/table_ii/requirements.txt
+python -m reproduction construct --cases n256_k64 --output runs/fig7-proposed
+python -m reproduction construct --cases n64_k32_crc4_ga n64_k32_sc_ml --output runs/fig5-refs
+python -m reproduction construct --output runs/all-curves
+```
+
+**Nine Proposed codes.** Each run starts with an empty candidate archive, follows the recorded search and refinement decisions, then checks the resulting information positions and frozen expressions against those used for the figure. Table II times eight construction runs. The ninth code, Proposed-NP in Fig. 10, is taken from the main run just before prefix protection. The verified outputs appear under `proposed/selected/`. When a search has a wall-time limit, the machine can affect which branches it reaches. The final identity check reports a mismatch if the recorded code was not reached.
+
+**Twenty-one comparison codes.** SC-ML, RecursCode and Number-polar are reconstructed from their published precoding matrices. PAC, CRC and eBCH codes are constructed from their design parameters. These outputs appear under `reference/`.
+
+**Configurations and timing.** Each `*.profile.json` specifies the information set. The paired `*.code.json` gives the frozen expressions and any CRC or PAC parameters. All indices start at zero. Run `python -m reproduction check` to verify the distributed configurations. [Configuration format and bit order](configs/README.md)
+
+On the original experiment machine, the eight runs took about 100 minutes in sequence, counting the shared main-code stage once. In Table II, **w/o refinement** measures the time to obtain a code that meets the minimum-distance target while taking channel reliability into account. **w/ refinement** also includes spectral refinement and prefix protection. The latter uses decoding on design frames. The independent FER measurements are available separately. [Measurement tables](results/paper_r112/README.md)
+
+## Library
+
+| Operation | Implementation |
+|---|---|
+| GA, RM–GA, BEC and 5G NR information sets | [profiles.py](polar_subcodes/construction/profiles.py) |
+| Canonical polar subcodes, binary linear algebra and the polar transform | [code.py](polar_subcodes/code.py), [algebra.py](polar_subcodes/algebra.py) |
+| PAC and CRC encoding, precoding matrix conversion and eBCH construction | [precoding.py](polar_subcodes/precoding.py), [ebch.py](polar_subcodes/construction/ebch.py) |
+| Payload encoding, SC, SCL and CRC-aided selection from the final list | [codec.py](polar_subcodes/codec.py), [NumPy SCL](polar_subcodes/decoding/full.py), [C++ SCL](cpp/scl_step_decoder_cpp.cpp) |
+| Exact low-weight spectra and complete codeword lists | [Spectrum routines](polar_subcodes/spectrum/), [Algorithm 1](algorithms/algorithm1_directory.py) |
+
+The following example encodes a nonzero payload and decodes its noiseless log-likelihood ratios with the NumPy SCL decoder.
+
+```python
+from polar_subcodes.codec import load_codec
+
+code = load_codec("configs/reference/n64_k32_crc4_ga.code.json")
+x = code.encode(37)  # 32 payload bits, including leading zeros
+llr = [12.0 * (1 - 2*((x >> i) & 1)) for i in range(code.mother.n)]
+assert code.decode(llr, list_size=32, backend="numpy") == [37]
+```
+
+```bash
 python tools/build_native.py --scl
-python main.py verify-theory
-python examples/n64_k32.py
-python main.py examples
+python main.py inspect configs/proposed/n64_k32.code.json
+python main.py enumerate --support configs/proposed/n64_k32.code.json --cutoff 12 --method native --output runs/fig5-spectrum
+python main.py enumerate --support configs/proposed/n64_k32.code.json --cutoff 12 --method words --output runs/fig5-words
+python main.py simulate --support configs/reference/n64_k32_crc4_ga.code.json --snr 3 --list-size 32 --frames 100 --messages random --backend cpp --output runs/crc-smoke
 ```
 
-On Linux/macOS, use GCC or Clang. On Windows the spectrum build uses MinGW
-(`g++` on PATH, `CXX`, `--compiler`, or `C:/MinGW64/bin/g++.exe`). The optional
-SCL extension uses Microsoft C++ Build Tools. Alternatively build the spectrum
-library with MSVC:
+For the Fig. 5 Proposed code, the first positive spectrum coefficient is $A_{12}=2048$. The two enumeration commands compute this count and list the corresponding words. The simulation command uses fresh noise samples. Both decoder backends accept nonzero payloads and use the payload rate to set $E_b/N_0$. Select `--backend numpy` for Python or `--list-size 1` for SC. [Validation checks](docs/R112_VALIDATION.md)
 
-```bash
-cmake -S . -B build/cmake
-cmake --build build/cmake --config Release
-python tools/setup_scl.py build_ext --inplace
-```
+## References
 
-`python tools/build_native.py` without `--scl` is enough for construction and
-enumeration. SCL then uses its slower NumPy fallback. Build binaries locally:
-no DLLs, executables, virtual environments, or platform-specific caches are tracked.
-Use a source checkout, not an installed wheel, for the data-driven examples.
+The following sources describe the techniques used in the library and the construction of the comparison codes.
 
-## Reproduce the Designs
+- E. Arıkan, “Channel Polarization,” IEEE Trans. Inf. Theory, 2009. [Polar transform and channel recursion](https://doi.org/10.1109/TIT.2009.2021379)
+- P. Trifonov and V. Miloslavskaya, “Polar Codes With Dynamic Frozen Symbols and Their Decoding by Directed Search,” ITW 2013, and “Polar Subcodes,” IEEE JSAC, 2016. [Dynamic frozen symbols](https://doi.org/10.1109/ITW.2013.6691213) · [eBCH subcodes](https://doi.org/10.1109/JSAC.2015.2504269)
+- P. Trifonov, “Efficient Design and Decoding of Polar Codes,” IEEE Trans. Commun., 2012. S.-Y. Chung, T. Richardson and R. Urbanke, IEEE Trans. Inf. Theory, 2001, for the fitted GA check-node approximation. [Polar GA](https://doi.org/10.1109/TCOMM.2012.081512.110872) · [GA approximation](https://doi.org/10.1109/18.910580)
+- I. Tal and A. Vardy, “List Decoding of Polar Codes,” IEEE Trans. Inf. Theory, 2015. E. Arıkan, “From Sequential Decoding to Channel Polarization and Back Again,” IEEE ITS Newsletter, 2019, for PAC. ETSI TS 138 212 V19.4.0, §§5.1, 5.3.1.2, for CRC6, CRC11 and the NR mother-code reliability order. [List decoding](https://doi.org/10.1109/TIT.2015.2410251) · [5G standard](https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/19.04.00_60/ts_138212v190400p.pdf)
+- V. Miloslavskaya and coauthors, IEEE Trans. Commun., 2020, 2021 and 2024, for the published precoding matrices. [SC-ML](https://doi.org/10.1109/TCOMM.2020.3014946) · [RecursCode](https://doi.org/10.1109/TCOMM.2021.3111625) · [Number-polar](https://doi.org/10.1109/TCOMM.2023.3331532)
 
-| Example | Zero-support `d_P` | Final `dmin` | Exact first coefficient |
-|---|---:|---:|---:|
-| `examples/n64_k32.py` | 8 | 12 | `A12 = 3,280` |
-| `examples/n128_k42.py` | 16 | 28 | `A28 = 16,128` |
-| `examples/n256_k64.py` | 32 | 48 | Not counted |
-| `examples/n256_k128.py` | 16 | 24 | `A24 = 344,220` |
-| `examples/n256_k171.py` | 8 | 12 | `A12 = 19,456` |
+The [earlier five-case release](docs/LEGACY.md) also includes a separate $[128,42]$ design. See the [notices](NOTICE.md) for upstream code and data attribution.
 
-```bash
-python examples/n128_k42.py --output runs/n128
-python examples/n256_k128.py --output runs/n256 --seconds 600
-python main.py reproduce all --output runs/all
-python examples/repeated_designs.py --output runs/repeated --repetitions 3
-```
+## AI Statement
 
-Each output directory must be new. Without `--output`, a timestamped directory
-under `runs/` is created. The log explains domain selection, the complete mother
-directory, shared source conditions, quotient exclusions, conditional means,
-and final verification. It also writes structured `events.jsonl`, intermediate
-models, search frontiers, timings, `support.json`, and `equations.txt`.
-
-`results/paper_summary.json` records the historical measurements from the author's
-computer, not a hardware-independent runtime guarantee. The cleaned drivers add
-some checks and do not have precisely the same timing boundaries. Their fresh
-wall times appear in each run's report. The largest examples take longer than the
-small examples and can use appreciable memory.
-
-The initial reader release passed **61 tests** with both native backends built.
-All five sequential zero-support replays matched the archived supports exactly.
-See [validation notes](docs/VALIDATION.md) and the compact logs, equations and
-source hashes in [release evidence](results/release_validation/manifest.json).
-To export an independent replay and a fresh test transcript:
-
-```bash
-python tools/export_evidence.py --runs runs/all --output runs/evidence
-```
-
-## Repository Map
-
-```text
-main.py                         all public commands
-examples/                       standalone experiment entry points
-profile/                        fixed information sets, with no support seeds
-results/                        archived supports and compact reference evidence
-polar_subcodes/
-  code.py                       validated code model, encoding, JSON, equations
-  algebra.py                    binary linear algebra and polar transforms
-  construction/                 domains, source patterns, outer completion
-  spectrum/                     exact counts and complete word directories
-  decoding/                     NumPy/C++ SCL and AWGN simulation
-  theory/                       compatibility, bounds, complete tiny-code reference
-  experiments/                  reproducible experiment orchestration and figures
-cpp/                            native word-directory and SCL sources
-vendor/polar-low-weight-spectrum/ upstream exact counter, unchanged MIT license
-tests/                          exhaustive small-code and numerical regressions
-tools/                          builds, parser, and evidence export
-docs/                           conventions, algorithm map, provenance and scope
-```
-
-## Inspect or Supply a Code
-
-```bash
-python tools/parse_design.py results/n256_k128/support.json --output runs/equations.txt
-python main.py inspect profile/n64_k32.json --include-static
-python main.py construct --profile profile/n64_k32.json --distance 12 --output runs/my_design
-```
-
-A profile JSON contains `N`, `K`, and a sorted `profile` array. A support JSON adds
-`columns`, whose entry `j` encodes the earlier information bits in the expression
-for `u[j]`. Decimal strings preserve integers larger than 64 bits. Alternatively,
-give `dynamic_expressions`, e.g. `{"4": [1, 3]}` means `u[4] = u[1] XOR u[3]`.
-The parser rejects noncausal indices, frozen-bit references, conflicting formats,
-and information positions with frozen expressions. See [conventions](docs/CONVENTIONS.md).
-
-The custom-profile driver is a **bounded first-domain construction**, not a promise
-to solve every feasible profile. `--recipe word`, `nested`, and `gap` expose the
-actual alternatives used by the examples. A failure or timeout is not global
-infeasibility. The complete all-domain specification is executable on tiny codes
-in `theory/exhaustive.py` and checked against exhaustive support enumeration.
-
-## Exact Spectra and Complete Words
-
-```bash
-python main.py enumerate --support results/n256_k128/support.json --cutoff 24 --method decomposition --output runs/a24
-python main.py enumerate --support results/n64_k32/support.json --cutoff 12 --method words --output runs/word_list
-python main.py enumerate --support results/n64_k32/support.json --cutoff 12 --method native --output runs/native
-python examples/enumeration_comparison.py --output runs/benchmark
-```
-
-`decomposition` counts disjoint left cosets and their exact right-shortening
-multiplicities without listing all full-code words. `words` lists every nonzero
-input/codeword through the chosen cutoff in `words.jsonl`. Both are exact only
-on completion. `native` and `python` expose the upstream independent counters.
-`quotient` and `direct` expose the readable complete-directory implementations
-used in the matched benchmark. The zero word is counted but omitted from word lists.
-
-Do not confuse a cutoff spectrum with the entire weight enumerator. Absence of a
-positive coefficient through `D` establishes `dmin >= D+1`, not an exact distance.
-No list-decoder spectrum estimate is labeled exact here. `--work` bounds native
-work per invocation. An exhausted invocation returns no claimed exact spectrum.
-
-## SCL and Monte Carlo
-
-```bash
-python examples/monte_carlo.py --support results/n64_k32/support.json --snr 3 --list-size 64 --frames 10000 --messages random --output runs/fer
-python main.py simulate --support results/n256_k128/support.json --snr 3 --list-size 64 --frames 1000 --backend cpp --output runs/fer256
-```
-
-The decoder accepts arbitrary valid causal supports and arbitrary transmitted
-messages. It is **min-sum/max-log SCL without CRC**, not exact log-domain SCL.
-Every path enforces the full frozen expression, with no limit of three sources.
-`--snr` is **Eb/N0**, BPSK maps 0 to +1, and `sigma^2 = 1/(2 R Eb/N0)`.
-The simulator compares decoded information bits, reports FER, BER and a 95%
-Wilson interval, and uses a fixed frame count with a reproducible noise seed.
-Small smoke runs are functionality checks, not publication-quality FER estimates.
-
-Equal-metric pruning has been corrected in this reader release: exactly `L`
-branches are retained, using `(metric, bit, parent-path index)` for ties.
-The original research files and historical FER logs were not modified or rerun.
-See [decoder notes](docs/DECODER.md) before comparing old simulation outputs.
-
-## Mechanisms, Verification and Scope
-
-```bash
-python examples/toy_mechanisms.py --output runs/toy
-python examples/verify_theory.py
-python examples/intermediate_distance.py --output runs/intermediate
-```
-
-The N32 experiments exhaustively compare complete mother constraints, replacement
-of old low-weight words, overlapping conditions, and conditional-mean completion.
-They emit JSON, PNG figures and editable PGFPlots files. The enumeration benchmark
-checks exact input-set equality before timing matched direct/quotient traversals.
-
-The historical distance-20 example verifies a stored, previously seeded code on
-the same N256/K128 profile. It is **not** a new zero-support construction or a
-controlled search comparison. This distinction is preserved in its metadata.
-
-The library is parameterized by profile and support, but the native spectrum
-representation currently supports **N <= 256**. The SCL decoder is not tied to
-these five profiles. Large lengths, dense released-row patterns, high projected
-rank and large error radius can exceed practical limits. See
-[algorithm scope](docs/ALGORITHMS.md) and [experiment map](docs/EXPERIMENTS.md).
-
-## Attribution
-
-The exact spectrum dependency is retained with its own MIT license and citation
-metadata. Binary elimination, MacWilliams identities, standard polar recursion,
-RM weight gaps, and Moore checks are attributed mathematical ingredients, not
-claims of new general results. [Provenance](docs/PROVENANCE.md) distinguishes reused
-kernels, packaging changes, and the decoder correction. This is a private research
-repository. A public license for the newly organized author code has not been selected.
+OpenAI's GPT-6 organized this repository from the authors' local experimental code, construction records and manuscript to help readers and prospective reviewers understand and reproduce the work and build on it in further research.

@@ -14,3 +14,30 @@ build/
 runs/
 .pytest_cache/
 .DS_Store
+
+# Manuscript sources, review copies and TeX build files
+*.tex
+*.bib
+*.bbl
+*.aux
+*.blg
+*.synctex.gz
+*.pdf
+*.docx
+/paper/
+/manuscript/
+/review/
+
+# Local experiment outputs and development environments
+/reproduction/table_ii/results/
+/output/
+/tmp/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
+*.7z

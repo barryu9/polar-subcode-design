@@ -1,0 +1,73 @@
+case,paper_operation,wall_seconds,pct_case_wall
+n256_k64,V-C | GA inputs and separately timed candidate selection,5.411224199982826,6.551713664388557
+n256_k64,V-A/B/E | Profile search and feasible construction,62.20067549997475,75.31031806234836
+n256_k64,V-D | Fixed-profile spectral refinement,0.0,0.0
+n256_k64,V-D | Prefix protection,0.0,0.0
+n256_k64,V-D | Joint spectrum and decoding feedback,0.0,0.0
+n256_k64,V-D | Composition and construction-time verification,0.0,0.0
+n256_k64,Checkpoint import and process time outside timed stages,14.980601700022817,18.13796827326309
+n256_k64,V-D | Total refinement (excludes composition),0.0,0.0
+n64_k32,V-C | GA inputs and separately timed candidate selection,0.38740820001112297,0.05329896369868175
+n64_k32,V-A/B/E | Profile search and feasible construction,439.18873460032046,60.42284190592861
+n64_k32,V-D | Fixed-profile spectral refinement,188.67114199977368,25.957056015195466
+n64_k32,V-D | Prefix protection,0.0,0.0
+n64_k32,V-D | Joint spectrum and decoding feedback,90.77230389998294,12.488299757909079
+n64_k32,V-D | Composition and construction-time verification,0.0,0.0
+n64_k32,Checkpoint import and process time outside timed stages,7.839196399901994,1.0785033572681653
+n64_k32,V-D | Total refinement (excludes composition),279.4434458997566,38.445355773104545
+n128_k64,V-C | GA inputs and separately timed candidate selection,0.43853019998641685,0.04904934314922277
+n128_k64,V-A/B/E | Profile search and feasible construction,172.78764980012784,19.326196296758386
+n128_k64,V-D | Fixed-profile spectral refinement,717.4334771001013,80.2445095140834
+n128_k64,V-D | Prefix protection,0.0,0.0
+n128_k64,V-D | Joint spectrum and decoding feedback,0.0,0.0
+n128_k64,V-D | Composition and construction-time verification,0.0,0.0
+n128_k64,Checkpoint import and process time outside timed stages,3.3996142997639254,0.3802448460089872
+n128_k64,V-D | Total refinement (excludes composition),717.4334771001013,80.2445095140834
+n256_k128,V-C | GA inputs and separately timed candidate selection,0.0,0.0
+n256_k128,V-A/B/E | Profile search and feasible construction,62.03461480000988,12.163512429620225
+n256_k128,V-D | Fixed-profile spectral refinement,0.0,0.0
+n256_k128,V-D | Prefix protection,0.0,0.0
+n256_k128,V-D | Joint spectrum and decoding feedback,445.40395419998094,87.3331212030449
+n256_k128,V-D | Composition and construction-time verification,0.0,0.0
+n256_k128,Checkpoint import and process time outside timed stages,2.567197500029579,0.503366367334883
+n256_k128,V-D | Total refinement (excludes composition),445.40395419998094,87.3331212030449
+n256_k171,V-C | GA inputs and separately timed candidate selection,27.32959189999383,4.646277482695315
+n256_k171,V-A/B/E | Profile search and feasible construction,103.91350660001626,17.666234740361258
+n256_k171,V-D | Fixed-profile spectral refinement,166.28766690002521,28.270405397736685
+n256_k171,V-D | Prefix protection,0.0,0.0
+n256_k171,V-D | Joint spectrum and decoding feedback,286.621669199958,48.72827272830997
+n256_k171,V-D | Composition and construction-time verification,0.0,0.0
+n256_k171,Checkpoint import and process time outside timed stages,4.051606199995149,0.6888096508967791
+n256_k171,V-D | Total refinement (excludes composition),452.9093360999832,76.99867812604664
+n1024_k512,V-C | GA inputs and separately timed candidate selection,0.0,0.0
+n1024_k512,V-A/B/E | Profile search and feasible construction,128.81210199999623,11.014820565982072
+n1024_k512,V-D | Fixed-profile spectral refinement,631.4480574000045,53.995602439584445
+n1024_k512,V-D | Prefix protection,298.5202405999298,25.52669224761288
+n1024_k512,V-D | Joint spectrum and decoding feedback,0.0,0.0
+n1024_k512,V-D | Composition and construction-time verification,107.960914199939,9.231819678338521
+n1024_k512,Checkpoint import and process time outside timed stages,2.7021754001034424,0.2310650684820833
+n1024_k512,V-D | Total refinement (excludes composition),929.9682979999343,79.52229468719733
+n1024_k512_lm,V-C | GA inputs and separately timed candidate selection,0.0,0.0
+n1024_k512_lm,V-A/B/E | Profile search and feasible construction,10.610140100005083,1.59160066792945
+n1024_k512_lm,V-D | Fixed-profile spectral refinement,594.1926514999941,89.13335847522961
+n1024_k512_lm,V-D | Prefix protection,59.11556900001597,8.867779145103828
+n1024_k512_lm,V-D | Joint spectrum and decoding feedback,0.0,0.0
+n1024_k512_lm,V-D | Composition and construction-time verification,0.0,0.0
+n1024_k512_lm,Checkpoint import and process time outside timed stages,2.7149421999929473,0.4072617117371104
+n1024_k512_lm,V-D | Total refinement (excludes composition),653.3082205000101,98.00113762033344
+n1024_k512_d32,V-C | GA inputs and separately timed candidate selection,0.0,0.0
+n1024_k512_d32,V-A/B/E | Profile search and feasible construction,136.3070329001057,9.840039231950874
+n1024_k512_d32,V-D | Fixed-profile spectral refinement,1187.3539334000088,85.7153812116925
+n1024_k512_d32,V-D | Prefix protection,59.12069230002817,4.267937752549539
+n1024_k512_d32,V-D | Joint spectrum and decoding feedback,0.0,0.0
+n1024_k512_d32,V-D | Composition and construction-time verification,0.0,0.0
+n1024_k512_d32,Checkpoint import and process time outside timed stages,2.4468926998670213,0.1766418038070801
+n1024_k512_d32,V-D | Total refinement (excludes composition),1246.474625700037,89.98331896424205
+total,V-C | GA inputs and separately timed candidate selection,33.566754499974195,0.5573071761984036
+total,V-A/B/E | Profile search and feasible construction,1115.8544563005562,18.526476728327907
+total,V-D | Fixed-profile spectral refinement,3485.3869282999076,57.86770797192034
+total,V-D | Prefix protection,416.75650189997396,6.919387730391918
+total,V-D | Joint spectrum and decoding feedback,822.7979272999219,13.660873571967509
+total,V-D | Composition and construction-time verification,107.960914199939,1.7924697555318432
+total,Checkpoint import and process time outside timed stages,40.702226399676874,0.6757770656620817
+total,V-D | Total refinement (excludes composition),4724.941357499803,78.44796927427976

@@ -27,9 +27,13 @@ def count(code, cutoff, max_work=100_000_000, backend='cpp'):
     """Return exact coefficients for 0 <= w <= cutoff, or raise on exhaustion."""
     if type(cutoff) is not int or not 0 <= cutoff <= code.n or max_work < 1:
         raise ValueError('Invalid cutoff or work limit')
-    if backend == 'cpp':
-        os.environ['POLAR_SPECTRUM_LIBRARY'] = str(library_path())
-    answer = algorithm1(code.n, code.checks, cutoff, backend=backend, max_work=max_work)
+    if backend == 'cpp' and code.n > 256:
+        from reproduction.table_ii.python.extended_exact_spectrum import compute
+        answer = compute(code.n, code.checks, cutoff, max_work)
+    else:
+        if backend == 'cpp':
+            os.environ['POLAR_SPECTRUM_LIBRARY'] = str(library_path())
+        answer = algorithm1(code.n, code.checks, cutoff, backend=backend, max_work=max_work)
     if (not answer['exact'] or answer['spectrum'].get(0) != 1 or
             answer['transmitted_dimension'] != code.k or answer['kernel_dimension'] != 0):
         raise RuntimeError('Spectrum dimension or zero-word audit failed')
@@ -40,7 +44,7 @@ def words(code, cutoff, max_work=100_000_000):
     """List every nonzero polar input u with wt(uG) <= cutoff exactly once.
 
     This is a complete bounded-weight directory, not a list-decoder estimate.
-    Native limits are 4 <= N <= 256. Tiny codes use independent message traversal.
+    The wide native build supports N <= 1024. Tiny codes use message traversal.
     """
     global _LIB
     if type(cutoff) is not int or not 0 <= cutoff <= code.n or max_work < 1:
@@ -52,7 +56,10 @@ def words(code, cutoff, max_work=100_000_000):
         values = [(u,w) for u,w in values if w <= cutoff]
         return values, dict(exact=True, spectrum={0:1, **dict(Counter(w for _,w in values))})
     if code.n > 256:
-        raise ValueError('The native complete-word backend currently supports N <= 256')
+        from reproduction.table_ii.python.wide_word_catalogue import enumerate_words
+        values, metadata = enumerate_words(code.n, code.profile, code.columns, cutoff, max_work)
+        metadata['spectrum'] = {0: 1, **dict(sorted(Counter(w for _, w in values).items()))}
+        return values, metadata
     if _LIB is None:
         _LIB = ctypes.CDLL(str(library_path()))
         pointer = ctypes.POINTER(ctypes.c_uint8)

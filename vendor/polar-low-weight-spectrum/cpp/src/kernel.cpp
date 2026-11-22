@@ -29,7 +29,10 @@ double now(){
     return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count();
 #endif
 }
-constexpr int capacity=256;
+#ifndef POLAR_SPECTRUM_CAPACITY
+#define POLAR_SPECTRUM_CAPACITY 256
+#endif
+constexpr int capacity=POLAR_SPECTRUM_CAPACITY;
 using Bits=std::bitset<capacity>;
 using Basis=std::map<int,Bits>;
 struct Big {
