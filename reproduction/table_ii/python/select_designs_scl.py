@@ -1,14 +1,9 @@
-"""Actual full-path SCL selection with paired noise and independent confirmation.
+"""Convert a causal code to decoder inputs and verify noiseless payload recovery."""
 
-GA and spectra do not determine the winner. The selection metric is the error
-of the terminal minimum-metric path, not genie-aided list survival.
-"""
-
-import math
 import numpy as np
-from feasible_design_bank import code_fingerprint, generator_rows, validate_design
+from feasible_design_bank import validate_design
 from polar_code.pc_funcs import pc_init
-from polar_code.SCL_full_decoder import decode_full_path_batch, simulate_awgn_llr_batch
+from polar_code.SCL_full_decoder import decode_full_path_batch
 
 def construction(n, profile, columns):
     profile = validate_design(n, profile, columns)
@@ -17,13 +12,6 @@ def construction(n, profile, columns):
     supports = tuple(tuple(i for i in profile if c >> i & 1) for c in columns)
     return actions, supports
 
-def wilson(errors, frames):
-    z = 1.959963984540054
-    p = errors/frames
-    denominator = 1+z*z/frames
-    center = (p+z*z/(2*frames))/denominator
-    half = z*math.sqrt((p*(1-p)+z*z/(4*frames))/frames)/denominator
-    return [max(0., center-half), min(1., center+half)]
 
 def noiseless_check(design, list_size, backend):
     n, k = design['N'], design['K']

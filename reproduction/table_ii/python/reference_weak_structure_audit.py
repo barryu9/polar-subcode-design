@@ -1,7 +1,18 @@
-"""Compare successful references with profile-matched controls, without search."""
+"""Build binary check rows in codeword coordinates for a fixed profile."""
 
 from functools import lru_cache
-from audit_success_support_structure import binary_rank
+
+def binary_rank(rows):
+    """Rank of the binary check rows, encoded as integers."""
+    pivots = {}
+    for value in rows:
+        while value:
+            pivot = value.bit_length() - 1
+            if pivot not in pivots:
+                pivots[pivot] = value
+                break
+            value ^= pivots[pivot]
+    return len(pivots)
 
 @lru_cache(maxsize=8)
 def polar_columns(n):

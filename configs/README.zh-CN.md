@@ -4,6 +4,8 @@
 
 运行 `python -m reproduction list`，可按码长、图例和译码列表大小查找图 5–10 中的码。[Proposed 配置索引](proposed/manifest.json)列出了表 II 的八种构造和消融码 Proposed-NP。[对比码索引](reference/manifest.json)给出了各条参考曲线的构造方法和输入。
 
+[坐标约定和 JSON 示例](../docs/CONVENTIONS.md)给出了下标、位序及冻结表达式的整数写法。
+
 每份 `*.profile.json` 记录固定信息集设计开始时选定的信息位置，配对的 `*.code.json` 还包含冻结表达式及该曲线的编码参数。从头运行构造脚本时，程序也会执行选取信息集的搜索。Proposed-NP 已含前缀保护之前得到的动态冻结表达式。
 
 | 字段或约定 | 含义 |

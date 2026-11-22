@@ -1,11 +1,7 @@
-"""Compare saved N=64 constructions using fixed-frame, paired SCL trials.
-
-The roster includes recent designs, published references, and explicitly
-identified historical learning baselines. It is not an exhaustive archive scan.
-"""
+"""Normalize a construction record and verify its causal generator row space."""
 
 from feasible_design_bank import code_fingerprint, generator_rows, validate_design
-from select_designs_scl import construction, noiseless_check
+from select_designs_scl import construction
 
 def normalize_json(data):
     """Convert canonical and historical action/support formats without truncation."""

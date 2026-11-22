@@ -1,9 +1,8 @@
 # Notices
 
 The accompanying manuscript is by Junhua You, Shaohua Wu, Aolin Liu,
-Yajing Deng, and Qinyu Zhang. The earlier reader release credited its author
-research code to Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
-No public license for the newly organized author code has been selected.
+Yajing Deng, and Qinyu Zhang. The original research code is credited to Junhua You, Shaohua Wu, Aolin Liu, and Qinyu Zhang.
+The authors have not specified a public license for their code.
 
 The bundled dependency in `vendor/polar-low-weight-spectrum` is distributed
 under its own MIT license. Its copyright and permission notice are preserved

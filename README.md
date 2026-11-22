@@ -2,7 +2,7 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-**Junhua You, Shaohua Wu, Aolin Liu, Yajing Deng, and Qinyu Zhang** · Manuscript r112
+**Junhua You, Shaohua Wu, Aolin Liu, Yajing Deng, and Qinyu Zhang**
 
 This repository accompanies the paper. To see how the method works, run Examples 3 and 4 on the same length-16 code. Example 3 enumerates the low-weight words directly. Example 4 shows how polar projection recovers the same exclusion conditions. To check a simulation curve, look it up by figure, legend and decoder list size, then inspect its frozen expressions or rebuild it from its construction inputs.
 
@@ -31,7 +31,7 @@ python -m reproduction.table_ii_values
 | Example 7 | `python -m paper_examples 7` | Compare the source-wise counting bound with the exact count for the length-32 example. |
 | Examples 8–9 | `python -m paper_examples 8` · `python -m paper_examples 9` | Follow fixed-profile construction and information-set exchanges at length 256. Example 8 uses a different information set from Fig. 8. Example 9 constructs the Proposed code in Fig. 7. The example guide gives the commands to rebuild both and verify their spectra. |
 | Theorems 1–3, Propositions 1–3 and Corollaries 1–2 | [Theory checks](theory/README.md) · `python -m theory.check_results` | Follow eight proof arguments through exact calculations on finite examples. |
-| Section VI, Figs. 5–10 and Tables II–III | [Configurations](configs/README.md) · [Measurements](results/paper_r112/README.md) | Match each curve to its information set, frozen expressions, decoder list size and measured frame error rate (FER). |
+| Section VI, Figs. 5–10 and Tables II–III | [Configurations](configs/README.md) · [Measurements](results/README.md) | Match each curve to its information set, frozen expressions, decoder list size and measured frame error rate (FER). |
 
 ```bash
 python -m algorithms.algorithm1_directory
@@ -59,7 +59,7 @@ python -m reproduction construct --output runs/all-curves
 
 **Configurations and timing.** Each `*.profile.json` specifies the information set. The paired `*.code.json` gives the frozen expressions and any CRC or PAC parameters. All indices start at zero. Run `python -m reproduction check` to verify the distributed configurations. [Configuration format and bit order](configs/README.md)
 
-On the original experiment machine, the eight runs took about 100 minutes in sequence, counting the shared main-code stage once. In Table II, **w/o refinement** measures the time to obtain a code that meets the minimum-distance target while taking channel reliability into account. **w/ refinement** also includes spectral refinement and prefix protection. The latter uses decoding on design frames. The independent FER measurements are available separately. [Measurement tables](results/paper_r112/README.md)
+On the original experiment machine, the eight runs took about 100 minutes in sequence, counting the shared main-code stage once. In Table II, **w/o refinement** measures the time to obtain a code that meets the minimum-distance target while taking channel reliability into account. **w/ refinement** also includes spectral refinement and prefix protection. The latter uses decoding on design frames. FER is evaluated on noise samples separate from the design frames. [Measurement tables](results/README.md)
 
 ## Library
 
@@ -90,7 +90,7 @@ python main.py enumerate --support configs/proposed/n64_k32.code.json --cutoff 1
 python main.py simulate --support configs/reference/n64_k32_crc4_ga.code.json --snr 3 --list-size 32 --frames 100 --messages random --backend cpp --output runs/crc-smoke
 ```
 
-For the Fig. 5 Proposed code, the first positive spectrum coefficient is $A_{12}=2048$. The two enumeration commands compute this count and list the corresponding words. The simulation command uses fresh noise samples. Both decoder backends accept nonzero payloads and use the payload rate to set $E_b/N_0$. Select `--backend numpy` for Python or `--list-size 1` for SC. [Validation checks](docs/R112_VALIDATION.md)
+For the Fig. 5 Proposed code, the first positive spectrum coefficient is $A_{12}=2048$. The two enumeration commands compute this count and list the corresponding words. The simulation command uses fresh noise samples. Both decoder backends accept nonzero payloads and use the payload rate to set $E_b/N_0$. Select `--backend numpy` for Python or `--list-size 1` for SC. [Decoder and simulation conventions](docs/DECODER.md) · [Validation checks](docs/VALIDATION.md)
 
 ## References
 
@@ -102,7 +102,7 @@ The following sources describe the techniques used in the library and the constr
 - I. Tal and A. Vardy, “List Decoding of Polar Codes,” IEEE Trans. Inf. Theory, 2015. E. Arıkan, “From Sequential Decoding to Channel Polarization and Back Again,” IEEE ITS Newsletter, 2019, for PAC. ETSI TS 138 212 V19.4.0, §§5.1, 5.3.1.2, for CRC6, CRC11 and the NR mother-code reliability order. [List decoding](https://doi.org/10.1109/TIT.2015.2410251) · [5G standard](https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/19.04.00_60/ts_138212v190400p.pdf)
 - V. Miloslavskaya and coauthors, IEEE Trans. Commun., 2020, 2021 and 2024, for the published precoding matrices. [SC-ML](https://doi.org/10.1109/TCOMM.2020.3014946) · [RecursCode](https://doi.org/10.1109/TCOMM.2021.3111625) · [Number-polar](https://doi.org/10.1109/TCOMM.2023.3331532)
 
-The [earlier five-case release](docs/LEGACY.md) also includes a separate $[128,42]$ design. See the [notices](NOTICE.md) for upstream code and data attribution.
+See the [notices](NOTICE.md) for code and data attribution.
 
 ## AI Statement
 

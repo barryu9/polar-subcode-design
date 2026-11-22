@@ -2,7 +2,6 @@ cff-version: 1.2.0
 message: "Please cite the accompanying manuscript when using this research code."
 title: "Deterministic Polar Subcode Design via Exact Low-Weight Spectrum Characterization — research software"
 type: software
-version: "r112"
 authors:
   - family-names: You
     given-names: Junhua

@@ -27,7 +27,7 @@ def profile_statistic(code):
 
 
 def main():
-    with (ROOT / "results/paper_r112/table_ii.csv").open(encoding="utf-8", newline="") as stream:
+    with (ROOT / "results/table_ii.csv").open(encoding="utf-8", newline="") as stream:
         for row in csv.DictReader(stream):
             case = row["case"]
             proposed = load_profile(ROOT / "configs/proposed" / (case + ".profile.json"))

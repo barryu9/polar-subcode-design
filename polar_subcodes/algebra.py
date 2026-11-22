@@ -118,15 +118,3 @@ def all_subspaces(n):
         known |= following
         frontier = following
     return sorted(known, key=lambda basis: (len(basis), basis))
-
-
-def gf_mul(a, b, n, polynomial):
-    result = 0
-    while b:
-        if b & 1:
-            result ^= a
-        b >>= 1
-        a <<= 1
-        if a & n:
-            a ^= polynomial
-    return result

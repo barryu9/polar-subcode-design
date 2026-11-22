@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """One-shot full-path SCL decoding for fixed construction evaluation.
 
-Training uses the step decoder because the agent needs a transition after
-each construction action.  Validation and Monte Carlo testing do not need
-those intermediate transitions: they provide one complete action/support
-trace and can decode each AWGN frame in one native call.
+The construction scores candidate expressions on design frames. The full-path
+decoder evaluates the selected expressions on whole frames.
 
 The preferred implementation is the CPU C++ backend exposed by
 ``_scl_step_decoder_cpp.decode_full_pxb``.  A NumPy implementation is kept as
@@ -22,7 +20,6 @@ from .SCL_step_decoder_batch import (
     _clone_action0_batch,
     _propagate_llr_batch,
     _update_c_batch,
-    scl_cpp_available,
 )
 
 try:  # pragma: no cover - availability depends on the local build
@@ -44,14 +41,6 @@ def _requested_backend(backend: str | None) -> str:
     if value not in ("auto", "numpy", "cpp"):
         raise ValueError("backend must be one of 'auto', 'numpy', or 'cpp'")
     return value
-
-
-def full_scl_backend_name(backend: str | None = None) -> str:
-    """Return the effective backend name without executing a decode."""
-    requested = _requested_backend(backend)
-    if requested == "auto":
-        return "cpp" if _SCL_CPP is not None else "numpy"
-    return requested
 
 
 def simulate_awgn_llr_batch(
@@ -332,7 +321,6 @@ def decode_full_path_batch(
 
 __all__ = [
     "decode_full_path_batch",
-    "full_scl_backend_name",
     "pack_construction_expressions",
     "simulate_awgn_llr_batch",
 ]

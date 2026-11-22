@@ -13,26 +13,17 @@ positions and selects the minimum-metric valid terminal path. If none passes
 the CRC, the frame counts as an error. Bit-error accounting then uses the
 minimum-metric candidate. Both backends use the same terminal rule.
 
-## Reader-Release Correction
+## Ties during coefficient construction
 
-The research implementation selected candidates by a metric threshold. Ties
-could select more candidates than available list slots, leaving an information
-decision unupdated for some paths. A noiseless nonzero N64 message with L=8
-exposed this during extraction. Both backends in this repository now use stable
-top-L selection. The regression includes that exact case, noisy backend agreement,
-tiny-code full-list/ML agreement, and supports referencing more than three bits.
-
-The general reader decoder uses the corrected top-L tie rule. The historical
-design-frame replay has a separate build of its original tie rule to regenerate
-the expression choices used in the plots.
+The Table II construction scripts build a separate decoder for the design frames. That build uses the metric-threshold tie rule used to choose the plotted codes’ frozen expressions. The general-purpose NumPy and C++ decoders use the stable top-L rule described above.
 
 ## Statistical Convention
 
-`--snr` denotes information-bit Eb/N0, not Es/N0. With rate `R=K/N`, real BPSK
+`--snr` denotes information-bit Eb/N0, not Es/N0. With payload rate `R=payload/N`, real BPSK
 noise variance is `1/(2 R 10^(EbN0_dB/10))`. Separate seeded streams drive noise
 and random messages. The frame count is fixed, so the reported Wilson interval
 has its usual fixed-sample interpretation. Zero measured errors give a positive
 upper interval endpoint, not a zero-FER guarantee.
 
 The plotted frame/error counts and the paired path-loss measurements are
-available in [the r112 data directory](../results/paper_r112/README.md).
+available in [the measurement tables](../results/README.md).

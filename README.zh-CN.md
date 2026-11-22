@@ -2,7 +2,7 @@
 
 [English](README.md) · **简体中文**
 
-**Junhua You、Shaohua Wu、Aolin Liu、Yajing Deng、Qinyu Zhang** · 稿件版本 r112
+**Junhua You、Shaohua Wu、Aolin Liu、Yajing Deng、Qinyu Zhang**
 
 本仓库是论文的可执行配套材料。初次阅读建议先运行例 3 和例 4。例 3 直接枚举一个长度为 16 的码的低重量码字，例 4 在同一码上用极化商投影得到相同的排除条件。若要核对仿真曲线，可按图号、图例和译码列表大小找到对应配置，查看动态冻结表达式，也可以从头构造该码。
 
@@ -31,7 +31,7 @@ python -m reproduction.table_ii_values
 | 例 7 | `python -m paper_examples 7` | 对照长度 32 的逐源补全计数下界和精确计数。 |
 | 例 8–9 | `python -m paper_examples 8` · `python -m paper_examples 9` | 跟踪长度 256 的固定信息集构造和信息位置交换。例 8 与图 8 使用不同的信息集。例 9 构造图 7 的 Proposed 码。例子导读给出了从零构造及核验两者重量谱的命令。 |
 | 定理 1–3、命题 1–3、推论 1–2 | [理论核查](theory/README.zh-CN.md) · `python -m theory.check_results` | 通过八组有限规模的精确计算，对照论文中的证明。 |
-| 第六部分，图 5–10、表 II–III | [码配置](configs/README.zh-CN.md) · [实测数据](results/paper_r112/README.zh-CN.md) | 按曲线核对信息集、动态冻结表达式、译码列表大小和实测帧错误率（FER）。 |
+| 第六部分，图 5–10、表 II–III | [码配置](configs/README.zh-CN.md) · [实测数据](results/README.zh-CN.md) | 按曲线核对信息集、动态冻结表达式、译码列表大小和实测帧错误率（FER）。 |
 
 ```bash
 python -m algorithms.algorithm1_directory
@@ -59,7 +59,7 @@ python -m reproduction construct --output runs/all-curves
 
 **配置与计时。** 每份 `*.profile.json` 给出信息集，配对的 `*.code.json` 给出动态冻结表达式以及该码使用的 CRC 或 PAC 参数。所有下标从零起算。运行 `python -m reproduction check` 可核对随仓库提供的配置。[配置格式与位序](configs/README.zh-CN.md)
 
-在原实验机器上串行执行八次构造约需 100 分钟，共享的主码阶段只计一次。表 II 的 **w/o refinement** 表示已经得到一个兼顾信道可靠性、最小距离达到目标的码所需的时间。**w/ refinement** 进一步计入重量谱细化和前缀保护的时间。前缀保护会在设计样本上执行译码，论文绘图使用的独立 FER 测量数据另列于实测表中。[实测数据表](results/paper_r112/README.zh-CN.md)
+在原实验机器上串行执行八次构造约需 100 分钟，共享的主码阶段只计一次。表 II 的 **w/o refinement** 表示已经得到一个兼顾信道可靠性、最小距离达到目标的码所需的时间。**w/ refinement** 进一步计入重量谱细化和前缀保护的时间。前缀保护使用设计帧进行译码，绘制 FER 曲线时另取噪声样本。[实测数据表](results/README.zh-CN.md)
 
 ## 函数库
 
@@ -90,7 +90,7 @@ python main.py enumerate --support configs/proposed/n64_k32.code.json --cutoff 1
 python main.py simulate --support configs/reference/n64_k32_crc4_ga.code.json --snr 3 --list-size 32 --frames 100 --messages random --backend cpp --output runs/crc-smoke
 ```
 
-图 5 的 Proposed 码在正重量处的首个非零谱系数为 $A_{12}=2048$。上面两条枚举命令分别计算重数、列出对应码字。仿真命令会生成新的噪声样本。两个译码后端都支持非零载荷，并按载荷码率折算 $E_b/N_0$。选择 `--backend numpy` 使用 Python 译码器，选择 `--list-size 1` 即为 SC 译码。[复现核查记录](docs/R112_VALIDATION.md)
+图 5 的 Proposed 码在正重量处的首个非零谱系数为 $A_{12}=2048$。上面两条枚举命令分别计算重数、列出对应码字。仿真命令会生成新的噪声样本。两个译码后端都支持非零载荷，并按载荷码率折算 $E_b/N_0$。选择 `--backend numpy` 使用 Python 译码器，选择 `--list-size 1` 即为 SC 译码。[译码与仿真约定](docs/DECODER.md) · [复现核查记录](docs/VALIDATION.md)
 
 ## 参考文献
 
@@ -102,7 +102,7 @@ python main.py simulate --support configs/reference/n64_k32_crc4_ga.code.json --
 - 列表译码见 I. Tal 与 A. Vardy 的 “List Decoding of Polar Codes”（IEEE Trans. Inf. Theory，2015）。PAC 码见 E. Arıkan 的 “From Sequential Decoding to Channel Polarization and Back Again”（IEEE ITS Newsletter，2019）。CRC6、CRC11 和 NR 母码可靠性排序见 ETSI TS 138 212 V19.4.0 的第 5.1 和 5.3.1.2 节。[列表译码](https://doi.org/10.1109/TIT.2015.2410251) · [5G 标准](https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/19.04.00_60/ts_138212v190400p.pdf)
 - SC-ML、RecursCode 和 Number-polar 的预编码矩阵分别见 V. Miloslavskaya 等人发表于 IEEE Trans. Commun. 的三项工作（2020、2021、2024）。[SC-ML](https://doi.org/10.1109/TCOMM.2020.3014946) · [RecursCode](https://doi.org/10.1109/TCOMM.2021.3111625) · [Number-polar](https://doi.org/10.1109/TCOMM.2023.3331532)
 
-[较早的五个构造案例](docs/LEGACY.md) 另含一个 $[128,42]$ 码。第三方代码与数据来源见[署名说明](NOTICE.md)。
+代码与数据来源见[署名说明](NOTICE.md)。
 
 ## AI 声明
 

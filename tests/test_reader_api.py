@@ -1,20 +1,19 @@
 """Reader-facing formats, exact enumerators and generic decoding regressions."""
 from collections import Counter
-import json
 from pathlib import Path
+import random
 import tempfile
 from types import SimpleNamespace
 import unittest
 import numpy as np
 
 from polar_subcodes.code import PolarSubcode,Design,load_code,load_profile
-from polar_subcodes.algebra import all_words,polar_transform
+from polar_subcodes.algebra import polar_transform
 from polar_subcodes.io import ROOT,write_json
 from polar_subcodes.spectrum.backend import count,words,WorkLimitError
 from polar_subcodes.spectrum.decomposition import spectrum
 from polar_subcodes.spectrum.quotient import evaluate
 from polar_subcodes.construction.source_patterns import PatternSearch,SourcePatternProblem
-from polar_subcodes.construction.bounded import outer_pattern_problem
 from polar_subcodes.decoding.scl import decode
 from polar_subcodes.decoding.helpers import scl_cpp_available
 from polar_subcodes.decoding.simulation import simulate
@@ -22,7 +21,9 @@ from polar_subcodes.decoding.simulation import simulate
 
 class ReaderTests(unittest.TestCase):
     def test_lossless_masks_and_canonical_equations(self):
-        for path in (ROOT/'results').glob('n*/support.json'):
+        paths = sorted((ROOT / "configs" / "proposed").glob("*.code.json"))
+        self.assertTrue(paths)
+        for path in paths:
             code=load_code(path)
             self.assertEqual(code,PolarSubcode(code.n,code.profile,tuple(map(int,code.as_dict()['columns']))))
             self.assertIn('Information positions',code.describe())
@@ -70,13 +71,28 @@ class ReaderTests(unittest.TestCase):
                         self.assertEqual(len(listed),len(set(listed)))
 
     def test_budget_exhaustion_is_not_a_zero_spectrum(self):
-        code=load_code(ROOT/'results/n64_k32/support.json')
+        code=load_code(ROOT/'configs/proposed/n64_k32.code.json')
         with self.assertRaises(WorkLimitError):
             words(code,12,max_work=1)
         with self.assertRaises(WorkLimitError):
             count(code,12,max_work=1)
         with self.assertRaises(RuntimeError):
             evaluate(dict(n=8,checks=(),cutoff=8,kind='directory'),'quotient',1)
+
+    def test_quotient_lifts_match_direct_encoding_for_random_causal_checks(self):
+        rng = random.Random(2319)
+        for n in (1, 2, 4, 8):
+            check_sets = [[], [1 << j for j in range(n)]]
+            check_sets.extend([(1 << j) | rng.randrange(1 << j) for j in range(n) if rng.randrange(2)]
+                              for _ in range(20))
+            for checks in check_sets:
+                for cutoff in range(-1, n + 2):
+                    case = dict(kind="directory", n=n, checks=checks, cutoff=cutoff)
+                    result, _ = evaluate(case, "quotient")
+                    expected = {u for u in range(1 << n) if polar_transform(u, n).bit_count() <= cutoff
+                                and all((u & row).bit_count() % 2 == 0 for row in checks)}
+                    self.assertEqual(set(result), expected)
+                    self.assertEqual(len(result), len(expected))
 
     def test_zero_cutoff_does_not_traverse_the_message_space(self):
         code=PolarSubcode(256,tuple(range(256)),(0,)*256)
@@ -120,7 +136,7 @@ class ReaderTests(unittest.TestCase):
         backends=['numpy']+(['cpp'] if scl_cpp_available() else [])
         for backend in backends:
             np.testing.assert_array_equal(decode(code,20*(1-2*x),16,backend),expected)
-        large=load_code(ROOT/'results/n64_k32/support.json')
+        large=load_code(ROOT/'configs/proposed/n64_k32.code.json')
         self.assertGreater(max(map(len,large.supports)),3)
         word=large.encode(1234567)
         llr=np.array([30*(1-2*((word>>i)&1)) for i in range(large.n)])
@@ -131,7 +147,7 @@ class ReaderTests(unittest.TestCase):
     def test_cpp_and_numpy_decisions_agree_on_noisy_frames(self):
         if not scl_cpp_available():
             self.skipTest('Optional C++ SCL extension not built')
-        code=load_code(ROOT/'results/n64_k32/support.json')
+        code=load_code(ROOT/'configs/proposed/n64_k32.code.json')
         llr=np.random.default_rng(23).normal(2,3,(20,64))
         for size in (1,4,16):
             np.testing.assert_array_equal(decode(code,llr,size,'numpy'),decode(code,llr,size,'cpp'))

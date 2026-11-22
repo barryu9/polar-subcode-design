@@ -1,9 +1,0 @@
-{
-  "spectrum": {
-    "0": 1,
-    "20": 4042
-  },
-  "exact": true,
-  "cutoff": 20,
-  "transmitted_dimension": 128
-}

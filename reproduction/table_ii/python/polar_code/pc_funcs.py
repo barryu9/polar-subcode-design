@@ -1,3 +1,4 @@
+"""Initialize the polar transforms and SCL decoder tables used in the timed constructions."""
 import numpy as np
 from typing import NamedTuple
 
@@ -214,7 +215,7 @@ class PC_Params(NamedTuple):
     bit_layer_vec: np.ndarray
     H_crc: np.ndarray
     crc_parity_check: np.ndarray
-    pi_seq: np.ndarray   # <==== 新增这一行
+    pi_seq: np.ndarray
 
 
 def pc_init(N, K, crc_length, F_N):
@@ -247,102 +248,14 @@ def pc_init(N, K, crc_length, F_N):
         crc_parity_check = np.array([])
         H_crc = np.array([])
 
-    # 生成 pi_seq 序列用于 Action 2 随机预编码
-    pi_seq = get_pi_seq(N)  # <==== 新增这一行
+    # 保留构造计时所用的完整译码器初始化过程。
+    pi_seq = get_pi_seq(N)
 
     pc_params = PC_Params(
         N=N, K=K, R=R, crc_length=crc_length, F_N=F_N, n=n, G_N=G_N,
         lambda_offset=lambda_offset, llr_layer_vec=llr_layer_vec,
         bit_layer_vec=bit_layer_vec, H_crc=H_crc, crc_parity_check=crc_parity_check,
-        pi_seq=pi_seq  # <==== 新增传入参数
+        pi_seq=pi_seq
     )
 
     return pc_params
-
-
-def pc_encode(pc_params, rp, d):
-    """
-    Polar码编码器。
-    将输入的源信息d（可以是一个向量或多个向量组成的矩阵）编码成Polar码。
-
-    参数:
-        pc_params (PC_Params): 包含Polar码参数的对象。
-                               必须包含属性：K, N, crc_length, crc_parity_check, G_N。
-        rp (dict): 包含可靠性剖面参数的字典。
-                   需要键 'info_bits_indices'。
-        d (np.ndarray): 输入的信息比特，可以是一个K维向量，或一个K x batch_size的矩阵。
-
-    返回:
-        np.ndarray: 编码后的码字x，一个N维向量或N x batch_size的矩阵。
-    """
-    # 统一处理输入数据维度
-    was_1d = d.ndim == 1
-    d = np.atleast_2d(d)
-    if was_1d:
-        d = d.T  # 转换为列向量形式便于批量处理
-
-    # --- 输入验证 ---
-    if d.shape[0] != pc_params.K:
-        raise ValueError(f"输入信息d的长度 ({d.shape[0]}) 与参数K ({pc_params.K}) 不匹配。")
-
-    # --- 参数提取 ---
-    batch_size = d.shape[1]
-    crc_parity_check = pc_params.crc_parity_check
-    info_bits_indices = rp.info_bits_indices
-    G_N = pc_params.G_N
-    N = pc_params.N
-    K = pc_params.K
-    crc_length = pc_params.crc_length
-
-    # --- 初始化输出矩阵 ---
-    x = np.zeros((N, batch_size), dtype=int)
-
-    # --- 对每个信息向量进行编码 ---
-    for batch_index in range(batch_size):
-        d_col = d[:, batch_index]
-
-        # 1. 添加CRC校验位 (如果需要)
-        if crc_length > 0:
-            if crc_parity_check.size == 0:
-                raise ValueError("crc_length > 0 但未提供 crc_parity_check 矩阵。")
-            crc_bits = np.dot(crc_parity_check, d_col) % 2
-            info_with_crc = np.concatenate((d_col, crc_bits))
-        else:
-            info_with_crc = d_col
-
-        # 2. 速率剖面映射 (将信息位放置到可靠信道上)
-        u = np.zeros(N, dtype=int)
-        u[info_bits_indices] = info_with_crc
-
-        # 3. Polar编码核心变换 (u * G_N)
-        encoded_bits = np.dot(u, G_N) % 2
-        x[:, batch_index] = encoded_bits
-
-    # 若原始输入是一维向量，则返回相同形状的一维结果
-    if was_1d:
-        return x.flatten()
-    else:
-        return x
-
-
-if __name__ == '__main__':
-    # --- 示例：如何使用这些函数 ---
-
-    # 1. 定义Polar码参数
-    N = 16  # 码长
-    K = 8  # 信息位长度
-    crc_length = 4  # CRC长度
-    F_N = np.array([[1, 0], [1, 1]], dtype=int)  # Arikan's Kernel
-
-    # 2. 初始化参数
-    print(f"Initializing Polar Code with N={N}, K={K}, CRC_length={crc_length}...")
-    try:
-        polar_params = pc_init(N, K, crc_length, F_N)
-        print("Initialization successful.")
-
-        # 3. 打印一些生成的结果
-        print("\n--- Generated Parameters ---")
-        print(polar_params.N)
-
-    except ValueError as e:
-        print(f"Error: {e}")

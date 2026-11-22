@@ -22,4 +22,5 @@ jobs:
       - run: python -m theory.check_results
       - run: python -m paper_examples all
       - run: python -m reproduction check
-      - run: python examples/n64_k32.py --output runs/ci_n64
+      - run: python -m reproduction.table_ii_values
+      - run: python main.py enumerate --support configs/proposed/n64_k32.code.json --cutoff 12 --method native --output runs/fig5-spectrum

@@ -1,4 +1,4 @@
-"""Regression checks for the executable r112 algorithms and finite proof checks."""
+"""Regression checks for the numbered algorithms and finite proof checks."""
 import unittest
 from itertools import combinations, product
 

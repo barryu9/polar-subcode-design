@@ -21,7 +21,7 @@ from run_reference_domain_sweep import write
 from run_rm_ga_profile_polish import canonical_check, read, reliability_cost
 from structure_feedback_profile_design import identifier, run as construct
 
-CASES = {30: 14, 32: 12, 51: 6}
+CASES = {32: 12}
 
 class Tee:
     def __init__(self, stream, log):

@@ -4,10 +4,10 @@
 
 | 文件 | 数据含义 |
 |---|---|
-| [fer.csv](fer.csv) | 图 5–10 的独立 FER 测量。用 `case` 将每个测量点对应到码配置。每行给出译码列表大小、信噪比、帧数、错误帧数和记录的置信序列。 |
+| [fer.csv](fer.csv) | 图 5–10 的 FER 实测数据。用 `case` 将每个测量点对应到码配置。每行给出译码列表大小、信噪比、帧数、错误帧数和记录的置信序列。 |
 | [bounds.csv](bounds.csv) | 各图在相应二进制输入 AWGN 信道和载荷码率下的正态近似与元逆界（meta-converse）。这两个理论基准由信道和码率确定。 |
-| [table_ii.csv](table_ii.csv) | r112 表 II 中的距离、最小重量码字数、2.25 dB 下的 GA 信息集统计量，以及两种口径的构造时间。 |
-| [prefix_diagnostics.csv](prefix_diagnostics.csv) | 表 III 的配对噪声样本。将相应事件计数除以 `common_frames`，可得正确路径被剪枝或最终误选的频率。图 10 的 FER 曲线另用独立抽样的帧。 |
+| [table_ii.csv](table_ii.csv) | 表 II 中的距离、最小重量码字数、2.25 dB 下的 GA 信息集统计量，以及两种口径的构造时间。 |
+| [prefix_diagnostics.csv](prefix_diagnostics.csv) | 表 III 将误帧分为正确路径被剪枝和最终误选两类。在每个信噪比下，取图 10 的 FER 任务较早一次快照中两个码均已完成的噪声帧进行重放。各类事件计数除以 `common_frames` 即为相应频率。 |
 
 ## 核对图表数据
 

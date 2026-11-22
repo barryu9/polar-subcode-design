@@ -4,6 +4,8 @@ English · [简体中文](README.zh-CN.md)
 
 Use `python -m reproduction list` to find a code from Figs. 5–10 by its legend, block length and decoder list size. The [Proposed manifest](proposed/manifest.json) lists the eight Table II cases and the Proposed-NP ablation. The [comparison-code manifest](reference/manifest.json) gives the construction method and inputs for each reference curve.
 
+See the [coordinate conventions and a worked JSON example](../docs/CONVENTIONS.md) for the bit order and mask representation.
+
 Each `*.profile.json` contains the information set selected at the start of fixed-profile design. The paired `*.code.json` adds the frozen expressions and the encoding parameters for that curve. The cold construction scripts also reproduce the search that selected the information set. Proposed-NP includes the frozen expressions obtained before prefix protection.
 
 | Field or convention | Interpretation |

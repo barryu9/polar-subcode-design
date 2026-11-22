@@ -33,11 +33,11 @@ These specify `u[2]=u[1]`, `u[4]=u[1] XOR u[3]` and
 Use decimal strings for masks to avoid loss of precision in JavaScript/JSON tools.
 
 ```python
-from polar_subcodes.code import load_code, PolarSubcode
+from polar_subcodes.code import load_code
 from polar_subcodes.decoding.scl import decode
 import numpy as np
 
-code = load_code('results/n64_k32/support.json')
+code = load_code('configs/proposed/n64_k32.code.json')
 message = 123
 x = code.encode(message)
 llr = np.array([20*(1-2*((x >> j) & 1)) for j in range(code.n)])
@@ -46,7 +46,4 @@ information_hat = u_hat[:, code.profile]
 print(code.describe())
 ```
 
-To search a custom information set, pass a profile-only JSON to `construct`.
-The constructor refuses a support file as its profile input. To simulate a
-custom code, pass its support JSON directly to `simulate`. Existing result
-directories are never silently overwritten by experiment commands.
+[Algorithm 3](../algorithms/algorithm3_fixed_profile.py) accepts the block length, information positions and target distance for a fixed-profile search. Use `python main.py simulate --help` to simulate a full configuration.

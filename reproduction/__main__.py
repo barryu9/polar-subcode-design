@@ -39,7 +39,7 @@ def check():
         expected[key] = (codec.mother.n, codec.payload, size, digest)
 
     displayed = set()
-    with (ROOT / "results/paper_r112/fer.csv").open(encoding="utf-8", newline="") as stream:
+    with (ROOT / "results/fer.csv").open(encoding="utf-8", newline="") as stream:
         for point in csv.DictReader(stream):
             key = point["case"]
             if (int(point["N"]), int(point["K"]), int(point["L"]), point["code_hash"]) != expected[key]:

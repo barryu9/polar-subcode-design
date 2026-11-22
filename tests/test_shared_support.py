@@ -2,17 +2,12 @@
 from collections import Counter, defaultdict
 from fractions import Fraction
 from itertools import product
-from pathlib import Path
 import unittest
 
 from polar_subcodes.construction.conditional import xor_mask
 from polar_subcodes.spectrum.relative import RelativePlotkinSpectrum
 from polar_subcodes.algebra import all_words
 from polar_subcodes.algebra import polar_transform, rref
-
-
-ROOT = Path(__file__).resolve().parents[1]
-
 
 
 def support_columns(n, edges, mask):
