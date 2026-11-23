@@ -71,6 +71,8 @@ python -m reproduction construct --output runs/all-curves
 | 载荷编码、SC、SCL 和 CRC 辅助的最终路径选择 | [codec.py](polar_subcodes/codec.py)、[NumPy SCL](polar_subcodes/decoding/full.py)、[C++ SCL](cpp/scl_step_decoder_cpp.cpp) |
 | 低重量谱精确计数与完整码字列表 | [谱枚举函数](polar_subcodes/spectrum/)、[算法 1](algorithms/algorithm1_directory.py) |
 
+论文中的重量谱计数使用了我们开发的谱枚举器。本仓库随附其 0.1.0 版的 Python 和 C++ 代码，并将 C++ 内核的容量改为可配置，以支持码长 1,024。独立仓库还提供 MATLAB 实现以及打孔和缩短的示例。[polar-low-weight-spectrum](https://github.com/barryu9/polar-low-weight-spectrum)
+
 下面的例子编码一个非零载荷，再将无噪声条件下的对数似然比送入 NumPy SCL 译码器，核对恢复出的载荷。
 
 ```python

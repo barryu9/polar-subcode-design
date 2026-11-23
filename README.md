@@ -71,6 +71,8 @@ On the original experiment machine, the eight runs took about 100 minutes in seq
 | Payload encoding, SC, SCL and CRC-aided selection from the final list | [codec.py](polar_subcodes/codec.py), [NumPy SCL](polar_subcodes/decoding/full.py), [C++ SCL](cpp/scl_step_decoder_cpp.cpp) |
 | Exact low-weight spectra and complete codeword lists | [Spectrum routines](polar_subcodes/spectrum/), [Algorithm 1](algorithms/algorithm1_directory.py) |
 
+For the paper's spectrum counts, this repository bundles the Python and C++ code from version 0.1.0 of our spectrum enumerator. The bundled C++ kernel has configurable capacity for the length-1,024 codes. The standalone project also provides a MATLAB implementation and examples for puncturing and shortening. [polar-low-weight-spectrum](https://github.com/barryu9/polar-low-weight-spectrum)
+
 The following example encodes a nonzero payload and decodes its noiseless log-likelihood ratios with the NumPy SCL decoder.
 
 ```python
