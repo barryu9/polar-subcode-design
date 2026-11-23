@@ -91,6 +91,9 @@ def run_case(case, folder, env):
         row["shared_base_case"] = "n1024_k512"
     print(f"Starting {case.key}; log: {log}", flush=True)
     with log.open("w", encoding="utf-8") as stream:
+        # This interval covers the construction driver through saving its
+        # candidate archive. The comparison with the plotted code below has
+        # a separate timer so it can be identified in the timing record.
         start = time.perf_counter()
         process = subprocess.run(command, cwd=ROOT, env=env, stdout=stream,
                                  stderr=subprocess.STDOUT, check=False)
@@ -126,6 +129,8 @@ def main():
     folder.mkdir(parents=True, exist_ok=False)
     selected = set(args.cases) if args.cases is not None else {case.key for case in CASES}
     if any(case.key in selected and case.variant_identity is not None for case in CASES):
+        # Proposed-LM and Proposed-D32 continue from a freshly constructed
+        # length-1024 code. Run that shared stage once for the selected suite.
         selected.add("n1024_k512")
     cases = [case for case in CASES if case.key in selected]
     threads = dict.fromkeys(("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"), "1")

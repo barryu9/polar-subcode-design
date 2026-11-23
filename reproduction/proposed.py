@@ -30,6 +30,7 @@ def digest(value):
 
 
 def identities(code):
+    """Identify the information set and the dynamic frozen expressions separately."""
     profile = digest({"N": code.n, "profile": list(code.profile)})
     expressions = digest({"N": code.n, "columns_hex": [hex(mask) for mask in code.columns]})
     return profile, expressions
@@ -43,6 +44,7 @@ def verify(code, row):
 
 
 def check(cases):
+    """Check a supplied pair at the start and end of fixed-profile design."""
     for case in cases:
         row = MANIFEST[case]
         seed = load_code(CONFIG / row["profile_file"])
@@ -54,18 +56,21 @@ def check(cases):
 
 
 def collect(run, cases):
-    """Pick the published curve only after the search has frozen its candidate archive."""
+    """Locate the measured curve in the completed search and export its configuration."""
     destination = run / "selected"
     destination.mkdir(exist_ok=True)
     for case in cases:
         row = MANIFEST[case]
+        # Proposed-NP is the pre-protection candidate of the Fig. 10 Proposed
+        # construction. Both codes can therefore be recovered from that run.
         parent = run / (BASE if case == BASE + "_np" else case)
         entries = json.loads((parent / "frozen_archive.json").read_text(encoding="utf-8"))
         matches = [item for item in entries if (item["profile_hash"], item["support_hash"]) ==
                    (row["profile_hash"], row["support_hash"])]
         if len(matches) != 1:
             raise ValueError(f"{case}: expected one matching profile and expression set; found {len(matches)}")
-        # Relative paths keep a completed run readable after moving it to another computer.
+        # Check the regenerated code itself. Its information positions and
+        # every frozen expression must match the pair used for the FER curve.
         code = load_code(parent / "designs" / matches[0]["name"] / "code.json")
         verify(code, row)
         profile = {"N": code.n, "K": code.k, "profile": list(code.profile)}
@@ -95,9 +100,14 @@ def write_paper_times(run):
         for row in sorted(report["results"], key=table_order):
             key = row["case"]
             full = row["construction_wall_seconds"]
+            # Table II takes both columns from one replay. Removing Section V.D
+            # refinement leaves the reliability-guided construction of a code that
+            # meets the distance target, including separately timed assembly and checks.
             subtotal = full - refinement[key]
             parent = BASE if key in (BASE + "_lm", BASE + "_d32") else None
             if parent:
+                # Each continuation reports the cost of reaching its own code
+                # starting from scratch, so include the shared main run once.
                 base_subtotal, base_full = values[parent]
                 subtotal += base_subtotal
                 full += base_full

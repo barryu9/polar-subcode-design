@@ -79,6 +79,8 @@ def run():
     feasible = Counter()
     spectra = {}
     for first, second in product(range(128), repeat=2):
+        # T has two seven-bit source columns. The third nonzero message selects
+        # both columns, so the three residuals depend on the same two choices.
         labels = (first, second, first ^ second)
         obs = tuple(projection[value] for projection, value in zip(projections, labels))
         hist = Counter()
@@ -98,8 +100,9 @@ def run():
     assert len(sizes) == 512 and set(sizes.values()) == {32}
     assert feasible == {6: 13472, 8: 1536}
 
-    # Reverse-source selection preserves the choices at the later source.
-    # Stack each coefficient's contributions to the three four-bit observations.
+    # A bit of T contributes one column of L_D. Stack its three message blocks,
+    # then use reverse-source basis selection to retain independent columns,
+    # starting with the later source. Rank 9 leaves 2^(14-9) lifts per class.
     columns = []
     for source in range(2):
         for j in range(7):
@@ -124,6 +127,9 @@ def run():
             child_counts.append(sum(not any(spectra[first, second][:5]) for second in choices[1]))
     assert Counter(child_counts) == {28: 14, 29: 1}
     phi = sum(Fraction(1, 2**e["rank"]) for e in events)
+    # At target 6 each message forbids only the zero observation. The joint
+    # lower bound counts violations with multiplicity. The source-wise bound
+    # uses the minimum number of extensions over all accepted first columns.
     joint_bound = (1 << len(basis)) * (1 - phi)
     product_bound = len(child_counts) * min(child_counts)
     assert (joint_bound, product_bound, sum(child_counts)) == (416, 420, 421)

@@ -186,6 +186,9 @@ class Experiment:
         return output / "code.json"
 
     def construct(self, profile, name, *, joint=256):
+        # This is the fixed-profile step: keep the information positions and
+        # seek causal coefficients meeting d_star. Return a candidate only
+        # after distance verification; the caller may try the next profile.
         folder = self.root / name
         source = self.root / "proposed" / f"{name}.json"
         write(source, dict(N=self.n, K=self.k, target=self.target, profile=list(profile)))
@@ -212,7 +215,12 @@ class Experiment:
                           catalogue_variants=catalogue_variants)
 
     def freeze(self, sources):
-        """Freeze outputs before the external, identity-only acceptance audit."""
+        """Collect distinct designs after search, before matching a plotted code.
+
+        The profile identifies information positions. Two codes with that
+        profile can have different dynamic frozen expressions, so each entry
+        also records the digest of its coefficient columns.
+        """
         from run_diverse_profile_suite import identities
         archive = {}
         for path in sources:

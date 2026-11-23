@@ -40,6 +40,8 @@ A `*.profile.json` file holds the chosen information positions at the start of f
 
 ## Follow the length-1024 variants
 
+To follow the Fig. 10 ablation in the code, start with the two calls inside the main driver's inner loop. The first scores competing decoding prefixes at each editable frozen position and chooses an expression on the design frames. The second combines those expressions with the refined suffix on the same information set. Comparing this code with the suffix before prefix protection isolates the change in decoding with the low-weight codewords through weight 24 held fixed. [Main driver](examples/reproduce_n1024_k512.py) · [Expression score](python/design_scl_protected_prefix.py) · [Prefix and suffix composition](python/compose_scl_prefix_completion.py)
+
 Proposed-NP is the suffix-refined code before prefix protection. Proposed combines this suffix with a spectrum-preserving prefix. Proposed-LM and Proposed-D32 both start from the newly computed main-code candidate `combined_02_floor16`. Selecting either variant with `--cases` automatically runs the shared construction. The [variant driver](examples/reproduce_n1024_variants.py) records the exchanged positions, design-noise seeds and search budgets.
 
 The final Proposed-D32 prefix step preserves the spectrum through weight 31. The weight-32 multiplicity in Table II comes from an independent complete count on the matched code. To repeat it, take the logged command for the [final stage](python/run_ga_priority_d32_origin_prefix.py), choose a fresh output folder and omit `--defer-spectrum-verification`.

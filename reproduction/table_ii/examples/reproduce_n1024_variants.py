@@ -92,6 +92,8 @@ def refine_baseline(run):
     return joint_refinement(run, continuation, "fixed_profile", 80)
 
 def low_multiplicity(run):
+    # Proposed-LM keeps the distance target 24. The information-position
+    # exchange and subsequent expression choices seek a smaller A_24.
     base = refine_baseline(run)
     exchange = joint_refinement(run, base, "exchange_three_positions", 110, exchange=3)
     return prefix_completion(run, exchange, "prefix_completion", 24, 24)
@@ -106,6 +108,9 @@ def distance_32(run):
     base = refine_baseline(run)
     exchange = joint_refinement(run, base, "exchange_four_positions", 110, exchange=4)
     d28 = protected_exchange(run, exchange, 28, [688])
+    # Proposed-D32 raises the distance target in two stages. At the final
+    # target, protecting weights through 31 excludes every positive weight
+    # below 32 while leaving the weight-32 multiplicity free to change.
     d32 = protected_exchange(run, d28, 32, [708, 712, 720, 736])
     prior = prefix_completion(run, d32, "initial_prefix_completion", 32, 31)
     rows = stage(run, prior, "suffix_row_refinement", "refine_suffix_layer_relative.py", [

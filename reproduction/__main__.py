@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def catalogue():
+    """Join the two manifests in figure order. A case ID identifies one code curve."""
     cases = []
     for key, row in read_json(ROOT / "configs/proposed/manifest.json").items():
         cases.append((key, "proposed", row["figure"], row["label"], row["L"], row["simulator_code_hash"]))
@@ -28,6 +29,8 @@ def check():
     expected = {}
     for key, kind, figure, label, size, digest in cases:
         directory = ROOT / "configs" / kind
+        # The profile records the information set I. The final configuration adds
+        # the dynamic frozen expressions and, where applicable, the payload mapping.
         profile = load_profile(directory / (key + ".profile.json"))
         codec = load_codec(directory / (key + ".code.json"))
         if (profile.n, profile.profile) != (codec.mother.n, codec.mother.profile) or identity(codec) != digest:
@@ -38,6 +41,9 @@ def check():
             raise ValueError(f"Repeated case {key}")
         expected[key] = (codec.mother.n, codec.payload, size, digest)
 
+    # Each SNR point belongs to a particular code and SCL list size L. Use
+    # payload K here: a CRC-aided code has additional mother-code information bits.
+    # Reading the stored frame/error counts also checks how the plotted FER was obtained.
     displayed = set()
     with (ROOT / "results/fer.csv").open(encoding="utf-8", newline="") as stream:
         for point in csv.DictReader(stream):
@@ -73,6 +79,8 @@ def main():
         selected = args.cases or [c[0] for c in catalogue()]
         base.mkdir(parents=True, exist_ok=False)
         refs = [r for r in read_json(CATALOG) if r["id"] in selected]
+        # The reference manifest specifies each comparison code. Proposed cases
+        # use the Section V construction and are collected after its search finishes.
         if refs:
             directory = base / "reference"
             directory.mkdir()

@@ -12,6 +12,9 @@ def main():
     run.ga()
     if run.smoke:
         return
+    # Start with dynamic frozen expressions for the distance-12 target.
+    # The next stage uses their information set as the starting point for
+    # exchanges ranked with the GA channel reliabilities.
     suite = run.root / "structural_start"
     run.call("structural_start", "run_manuscript_n64_suite.py", [
         "--output", suite, "--ks", 32, "--snr", 2.0, "--seconds", 10,
@@ -31,9 +34,10 @@ def main():
         "--anchors", 8, "--seconds", 3600, "--support-seconds", 30,
         "--refine-trials", 96, "--refine-seconds", 30, "--work", 30000000,
         "--skip-polish"])
-    # Endpoints and structural representatives are selected by measured metrics.
     archive = read(spectral / "archive.json")
-    # Keep the two reliability/spectrum endpoints within a declared cost box.
+    # GA_cost scores the information set. A_target counts codewords at weight
+    # 12. Among profiles within the cost budget, continue from the best on
+    # each measure (the two choices can be the same code).
     early = [entry for entry in archive if entry["depth"] <= 2]
     lowest_cost = min(entry["GA_cost"] for entry in early)
     admissible = [entry for entry in early if entry["GA_cost"] <= 1.3 * lowest_cost]

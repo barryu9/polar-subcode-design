@@ -16,12 +16,16 @@ def run():
         # for each nonzero bit of this message, and zero blocks elsewhere.
         rows.extend(sum(q << (7 * bit) for bit in support(msg)) for q in quotient)
     assert len(rref(rows)) == 11
+    # vec(T) packs seven checks per source column. Selecting these four
+    # entries in order (alpha,b0,c,b1) forms the restricted matrix L_3 R.
     coordinates = (0, 7, 8, 14)
     restriction = [sum(((row >> i) & 1) << bit for bit, i in enumerate(coordinates))
                    for row in rows]
     assert restriction.count(0) == 9
     active = [row for row in restriction if row]
     assert active == [0b0100, 0b1110]
+    # A feasible observation must be (1,1). The representative (0,0,1,0)
+    # gives that pair. The homogeneous system gives all changes preserving it.
     origin, directions = solve([(row, 0) for row in active], 4)
     assert origin == 0 and len(directions) == 2
     representative = 0b0100

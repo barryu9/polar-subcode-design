@@ -12,6 +12,9 @@ def main():
     if run.smoke:
         run.ga()
         return
+    # Example 8 illustrates fixed-profile construction at these dimensions.
+    # This Fig. 8 driver searches from an RM–GA anchor and reaches a different
+    # information set. Both constructions use the distance target 24.
     codes = run.bank(3, profiles=1, layered=False, anchor=True, joint=0, focus=64)
     sources = list(codes)
     for index, source in enumerate(codes):

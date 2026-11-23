@@ -44,6 +44,8 @@ python -m theory.check_results theorem2 proposition3
 
 ## Rebuild the simulation codes
 
+To follow one curve from its construction inputs to the two JSON files that specify the code, see the [reproduction guide](reproduction/README.md).
+
 The last command below constructs all **30 codes** in Figs. 5–10 in a new output directory. To reproduce just one curve, select its case ID with `--cases`. Use `python -m reproduction list` to see the available IDs.
 
 ```bash
@@ -103,6 +105,7 @@ The following sources describe the techniques used in the library and the constr
 - P. Trifonov, “Efficient Design and Decoding of Polar Codes,” IEEE Trans. Commun., 2012. S.-Y. Chung, T. Richardson and R. Urbanke, IEEE Trans. Inf. Theory, 2001, for the fitted GA check-node approximation. [Polar GA](https://doi.org/10.1109/TCOMM.2012.081512.110872) · [GA approximation](https://doi.org/10.1109/18.910580)
 - I. Tal and A. Vardy, “List Decoding of Polar Codes,” IEEE Trans. Inf. Theory, 2015. E. Arıkan, “From Sequential Decoding to Channel Polarization and Back Again,” IEEE ITS Newsletter, 2019, for PAC. ETSI TS 138 212 V19.4.0, §§5.1, 5.3.1.2, for CRC6, CRC11 and the NR mother-code reliability order. [List decoding](https://doi.org/10.1109/TIT.2015.2410251) · [5G standard](https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/19.04.00_60/ts_138212v190400p.pdf)
 - V. Miloslavskaya and coauthors, IEEE Trans. Commun., 2020, 2021 and 2024, for the published precoding matrices. [SC-ML](https://doi.org/10.1109/TCOMM.2020.3014946) · [RecursCode](https://doi.org/10.1109/TCOMM.2021.3111625) · [Number-polar](https://doi.org/10.1109/TCOMM.2023.3331532)
+- **Original code specifications.** Vera Miloslavskaya provides the downloadable text files for SC-ML, RecursCode and Number-polar. For each of the seven codes used here, the corresponding JSON records the original filename, its SHA-256 digest and the rows of the SC-aimed precoding matrix $Z$. [Author’s data download page](https://sites.google.com/site/veradmiloslavskaya/specifications-of-error-correcting-codes) · [Matrix inputs used in this paper](reproduction/reference_inputs/)
 
 See the [notices](NOTICE.md) for code and data attribution.
 

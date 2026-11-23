@@ -1,8 +1,9 @@
 """Finite checks of all three theorems, three propositions and two corollaries.
 
-Run: python -m theory.check_results  (or append one name, e.g. theorem2).
-Each check compares a theoretical prediction with an independently constructed
-finite set or count. The manuscript contains the general proofs.
+Run python -m theory.check_results from the repository root. To follow one
+argument, append its name, e.g. theorem2. Bit j of a packed word is coordinate
+j in the paper. XOR adds vectors over GF(2), and bit_count() gives Hamming
+weight. Each check prints its summary after its comparisons have passed.
 """
 import argparse
 from collections import Counter
@@ -27,6 +28,8 @@ def require(predicate, message):
 def independent_words(code):
     """Return (u,x) using the entrywise rule (G_N)[i,j]=1 iff j is a submask of i."""
     for bits in product((0, 1), repeat=code.k):
+        # Place the message at its information positions. At frozen position j,
+        # the parity of the selected source bits gives the dynamic frozen bit.
         source = sum(bit << i for bit, i in zip(bits, code.profile))
         u = source | sum(((mask & source).bit_count() % 2) << j
                          for j, mask in enumerate(code.columns))
@@ -36,6 +39,7 @@ def independent_words(code):
 
 
 def configurations(n, profile):
+    """Keep the information set fixed and try both values of every causal coefficient."""
     design = Design(n, profile)
     edges = causal_pairs(design)
     for bits in product((0, 1), repeat=len(edges)):
@@ -43,6 +47,11 @@ def configurations(n, profile):
 
 
 def join(left, right, outer):
+    """Assemble the parent code from the constituent checks and T in (15).
+
+    outer[i] is column i of T. Its bit r couples the i-th left information
+    bit to the r-th frozen expression of the right constituent.
+    """
     h = left.n
     full_profile = left.profile + tuple(h+i for i in right.profile)
     columns = list(left.columns) + [c << h for c in right.columns]
@@ -52,8 +61,9 @@ def join(left, right, outer):
 
 
 def proposition1():
-    # The later source at 4 permits a low-weight codeword even though the
-    # earlier row at 3 has weight four. Check the actual words, not just counts.
+    # Here i_D = 4: row 3 has weight four, row 4 has weight two. For words
+    # through D = 2 the leading input position is at least 4. Shifting each
+    # frozen-expression mask keeps exactly the source coefficients in E_D.
     profile, cutoff = (3, 4, 7), 2
     threshold = min(i for i in profile if 1 << i.bit_count() <= cutoff)
     by_retained = {}
@@ -78,6 +88,10 @@ def theorem1():
                            tuple(0 if j in released else c for j, c in enumerate(base.columns)))
     directory = Counter()
     for u, x in independent_words(relaxed):
+        # A surviving input must start at an original information position.
+        # Store (source pattern q, baseline check residual beta, weight w).
+        # These masks keep their original coordinate labels so that two rows
+        # contributing to the same released check add at the same bit.
         if x.bit_count() in weights and leading(u) in base.profile:
             residual = sum((((u >> j) ^ (base.columns[j] & u).bit_count()) & 1) << j
                            for j in released)
@@ -91,6 +105,9 @@ def theorem1():
                          if x.bit_count() in weights)
         predicted = Counter()
         for (pattern, residual, weight), multiplicity in directory.items():
+            # The same increment matrix V acts on every source pattern.
+            # When V q^T = beta, all M_w(q, beta) inputs of this entry
+            # satisfy the released checks and contribute to A_w.
             value = 0
             for bit, (j, i) in zip(bits, free):
                 if bit and pattern >> i & 1:
@@ -102,6 +119,7 @@ def theorem1():
 
 
 def proposition2():
+    """Verify that Algorithm 1 emits each input through D exactly once."""
     cases = 0
     for n in (1, 2, 4):
         for k in range(n + 1):
@@ -116,21 +134,29 @@ def proposition2():
 
 
 def small_pair():
+    """Two length-four constituents, two right frozen positions, and D = 2."""
     left = PolarSubcode(4, (0, 1), (0, 0, 0, 2))
     right = PolarSubcode(4, (0, 1), (0, 0, 1, 3))
     return left, right, 2
 
 
 def decode_theta(theta, f, k):
+    """Unpack vec(T) into k source columns, each containing f check bits."""
     mask = (1 << f) - 1
     return tuple((theta >> (i*f)) & mask for i in range(k))
 
 
 def joint(conditions, outer):
+    """Stack Q_a T m in critical-message order to form L_D theta, as in (22)."""
     return tuple(c.project(xor_selected(outer, c.message)) for c in conditions)
 
 
 def theta_data():
+    """Tabulate both sides of the quotient for all 16 outer matrices.
+
+    observations comes from the projected checks. spectra counts directly
+    encoded parent codewords at weights 0 through D, including A_0 = 1.
+    """
     left, right, cutoff = small_pair()
     conditions = critical_conditions(left, right, cutoff)
     f = right.n - right.k
@@ -151,6 +177,8 @@ def theorem2():
     all_messages = critical_conditions(left, right, left.n * 2)
     for t in observations:
         outer = decode_theta(t, right.n - right.k, left.k)
+        # For the zero left message, each right codeword appears in both
+        # halves of the parent word. Its weight therefore doubles.
         prediction = Counter(2*x.bit_count() for _, x in independent_words(right))
         for condition in all_messages:
             a = left.encode(condition.message)
@@ -161,6 +189,8 @@ def theorem2():
                     prediction[a.bit_count()+2*z.bit_count()] += 1 << len(condition.quotient.kernel)
         direct = Counter(x.bit_count() for _, x in independent_words(join(left, right, outer)))
         require(prediction == direct, "quotient formula mismatches full spectrum")
+        # Return to D = 2 for the distance test. This right code has minimum
+        # distance 2, so the zero-message branch already meets d_star = 3.
         permitted = all(y not in c.forbidden for y, c in zip(observations[t], conditions))
         require(permitted == (sum(spectra[t][1:]) == 0), "distance equivalence")
 
@@ -190,10 +220,16 @@ def proposition3():
     directions = [b << (i*f) for i, block in enumerate(retained) for b in block]
     reps = [xor_selected(directions, bits) for bits in range(1 << len(directions))]
     feasible = {t for t, counts in spectra.items() if not any(counts[1:])}
+    # A representative fixes one joint observation. Adding any member of
+    # ker L_D leaves it fixed; taking all feasible representatives recovers
+    # every feasible outer matrix, including the discarded coordinates.
     require({t ^ k for t in reps if t in feasible for k in kernel} == feasible,
             "feasible fibers do not reconstruct every original assignment")
     require(len(reps) * len(kernel) == len(observations), "rank-nullity")
     for i, block in enumerate(retained):
+        # L_i contains exactly the messages whose last nonzero bit is i.
+        # Compare the whole tuple of observations from column t_i, since
+        # one choice of that column must serve every message in the group.
         group = [c for c in conditions if c.message.bit_length() == i + 1]
         original = {tuple(c.project(t) for c in group) for t in range(1 << f)}
         reduced = {tuple(c.project(xor_selected(block, bits)) for c in group)
@@ -230,6 +266,8 @@ def corollary1():
             if domain in checked:
                 continue
             checked.add(domain)
+            # Every point must meet the distance target. One attainable
+            # forbidden syndrome for one message rules out this all-points claim.
             projected = all({observations[t][j] for t in domain}.isdisjoint(c.forbidden)
                             for j, c in enumerate(conditions))
             direct = all(not any(spectra[t][1:]) for t in domain)
@@ -238,18 +276,23 @@ def corollary1():
 
 
 def check_mean_tree(observations, forbidden, feasible):
-    """Compare each affine violation probability with the actual binary leaves."""
+    """Compare the conditional mean Phi(pi) in (36) with direct violation counts."""
     width = (len(observations) - 1).bit_length()
     counts = {t: sum(y in bad for y, bad in zip(row, forbidden))
               for t, row in observations.items()}
     guaranteed = 0
     means = {}
     for depth in reversed(range(width + 1)):
+        # The low 'depth' bits encode the partial assignment pi. Work from
+        # leaves toward the root so both child means are available below.
         for bits in range(1 << depth):
             domain = [t for t in observations if t % (1 << depth) == bits]
             mean = Fraction(sum(counts[t] for t in domain), len(domain))
             from_images = Fraction(0)
             for j, bad in enumerate(forbidden):
+                # The remaining bits map affinely onto this attainable
+                # syndrome set with equal preimage sizes. The intersection
+                # fraction is the violation probability for this condition.
                 image = {observations[t][j] for t in domain}
                 from_images += Fraction(len(image & bad), len(image))
             require(mean == from_images, "wrong conditional violation probability")
@@ -257,6 +300,8 @@ def check_mean_tree(observations, forbidden, feasible):
             successes = sum(t in feasible for t in domain)
             require(successes >= ceil(len(domain) * max(0, 1-mean)), "count lower bound")
             if mean < 1:
+                # Along a minimum-mean path Phi stays below one. At a leaf
+                # Phi equals the integer number of violations, hence is zero.
                 value = bits
                 for j in range(depth, width):
                     value = min((value, value | (1 << j)), key=lambda b: means[j+1, b])
@@ -305,6 +350,8 @@ def corollary2():
     for c in conditions:
         a = left.encode(c.message)
         weight = a.bit_count()
+        # The factor stores rank(P_inside), equal to w_a - 1 here.
+        # The quotient rank r_a in (46) is f minus that stored rank.
         require(len(c.quotient.kernel) == 1 and c.quotient.rank == weight - 1,
                 "retained-constituent rank")
         i = c.message.bit_length() - 1
@@ -317,6 +364,9 @@ def corollary2():
         group = [c for c in conditions if c.message.bit_length() == i+1]
         next_level = []
         for prefix in prefixes:
+            # Assign the next full column t_i. Every earlier accepted prefix
+            # must have at least 2^f - lambda_i extensions, even if their
+            # identities differ from one prefix to the next.
             continuations = [(*prefix, t) for t in range(1 << f) if all(
                 c.project(xor_selected((*prefix, t), c.message)) not in c.forbidden
                 for c in group)]

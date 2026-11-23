@@ -1,9 +1,10 @@
-"""Complete spectrum-neutral causal expressions using prefix-list observations.
+"""Decoding-prefix protection for a fixed information set (Section V.D).
 
-The leading-index polar coset bound protects the complete spectrum through a
-specified cutoff. A deterministic conditional-expectation rule and coordinate
-improvements minimize a sampled wrong-prefix mass surrogate at each frozen bit.
-This surrogate is not the unbounded-list conditional entropy or a FER guarantee.
+The leading-position bound identifies early frozen expressions that can change
+while preserving the set of low-weight codewords through the cutoff. For the
+Fig. 10 Proposed code, the design score is the total weight of competing
+decoding prefixes after applying a candidate expression at the current bit.
+Full-frame decoding then measures how often the transmitted path leaves the list.
 """
 
 import argparse
@@ -35,6 +36,8 @@ from refine_protected_core_spectrum import write
 from select_designs_scl import construction, noiseless_check
 
 def protected_boundary(profile, cutoff, n):
+    # i_{w_star} is the first information position whose polar row has weight
+    # at most the protection cutoff. The prefix domain uses frozen j below it.
     return min((i for i in profile if 1 << i.bit_count() <= cutoff), default=n)
 
 def check_spectral_invariance(n, profile, before, after, cutoff):
@@ -68,7 +71,13 @@ def conditional_expectation_row(x, delta, order):
     return result
 
 def choose_expression(x, c0, c1, baseline, max_flips=8):
-    """Choose one shared row, with static/baseline rows as explicit safeguards."""
+    """Choose one frozen expression shared by all observed decoding prefixes.
+
+    A row of x holds the earlier information bits on one competing path.
+    Its parity with a candidate coefficient vector determines whether that
+    path contributes c0 or c1 to the score. Compare the current expression,
+    the all-zero expression and the proposals, then try single-bit improvements.
+    """
     delta = c1-c0
     importance = x.T @ np.abs(delta)
     order = np.lexsort((np.arange(x.shape[1]), -importance))
@@ -143,6 +152,9 @@ def design_prefix(n, profile, columns, cutoff, llr, list_size, row_floor=1,
             _propagate_llr_batch(params, j, llr, p, c, list_size)
             history = u[:, sources, :].transpose(0, 2, 1)
             wrong = np.any(history != 0, axis=2)
+            # Design frames transmit the all-zero input. A competing prefix
+            # contributes to this score while the transmitted path is still
+            # in the list for the same frame.
             correct_alive = np.any(active & ~wrong, axis=1)
             eligible = active & wrong & correct_alive[:, None]
             if np.any(eligible):

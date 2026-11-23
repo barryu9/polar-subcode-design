@@ -12,7 +12,9 @@ def complete_initial_domain(n, profile, target, ordering):
 
     domain = initial_structure(n, profile, target)
     released = domain["rows"]
-    # The union with the released positions gives the complete supercode.
+    # Releasing these frozen checks leaves a common supercode containing
+    # every assignment in the initial domain. Its low-weight inputs give the
+    # complete directory before conditions are grouped by source pattern.
     mother_profile = tuple(sorted(set(profile) | set(released)))
     mother = PolarSubcode(n, mother_profile, (0,) * n)
     # These initial domains use only rows of weight at least d_P. Their RM

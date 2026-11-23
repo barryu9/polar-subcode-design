@@ -36,6 +36,8 @@ def classify(case_path, stage, seconds):
         if not records:
             raise ValueError(f"No nested refinement timings in {trials}")
         refinement = sum(read(path)["seconds"] for path in records)
+        # This stage includes both profile search and spectral refinement.
+        # The nested timers isolate refinement within the parent interval.
         return split_time(seconds, refinement, "spectral_refinement", "profile_construction")
     if stage in ("exchange_three_positions", "exchange_four_positions"):
         summary = read(case_path / stage / "summary.json")
@@ -70,6 +72,8 @@ def rows_for_case(run, result):
     if result["status"] != "reproduced" or not all(s["status"] == "completed" for s in stages):
         raise ValueError(f"Use a completed reproduction for timing attribution: {case}")
     outside = wall - sum(s["seconds"] for s in stages)
+    # Startup and work between stages still count toward elapsed wall time.
+    # Keeping this remainder makes the per-case percentages add up to 100.
     if outside < 0:
         raise ValueError(f"Logged stages exceed process wall time: {case}")
     rows = [

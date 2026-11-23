@@ -12,6 +12,10 @@ def main():
     reliability = run.ga(2.0)
     if run.smoke:
         return
+    # Example 9 traces one branch of this Fig. 7 search. The RM–GA order
+    # proposes information positions. An unresolved suffix tells the search
+    # where to try an exchange, then fixed-profile construction tests the
+    # new information set against the same full-code distance target of 48.
     output = run.root / "structural_exploration"
     run.call("structural_exploration", "structure_feedback_profile_design.py", [
         "--n", 256, "--k", 64, "--target", 48, "--reliability", reliability,

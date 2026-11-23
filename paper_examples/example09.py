@@ -1,8 +1,9 @@
 """Example 9. Follow two profile exchanges and solve the parent exclusion tests.
 
-The default run solves both 32-bit domains and rebuilds every parent forbidden
-set. --verify-spectrum also calls the exact native counter on the saved longer
-suffixes and the completed N=256 code.
+The default run follows the two profile exchanges shown in the paper, solves
+both length-32 domains and rebuilds the forbidden sets for the four editable
+parent sources. --construct also solves the larger suffixes and the parent.
+--verify-spectrum calls the exact native counter on their lower weight layers.
 """
 import argparse
 from collections import defaultdict
@@ -76,6 +77,10 @@ def run(verify_spectrum=False, rebuild=False):
             break
     assert skipped == [248, 244, 242, 241, 227]
     assert [i for i in seed if i not in eligible[:64]] == [179, 121, 173, 199, 118]
+    # Replay the two exchanges selected in Example 9. In the first, global
+    # 233 becomes a frozen position on the length-32 suffix, admitting a new
+    # expression. In the second, 211 -> 158 reduces the length-64 suffix
+    # dimension from 37 to 36 while preserving its verified length-32 profile.
     first = (set(seed) - {233}) | {227}
     second = (first - {211}) | {158}
     profile = tuple(sorted(second))
@@ -131,6 +136,9 @@ def run(verify_spectrum=False, rebuild=False):
         forbidden[scope].update(v for v, y in enumerate(labels) if y in event["forbidden"])
     assert critical == 44 and len(forbidden) == 11 and 0 not in forbidden
     assert {len(bad) for bad in forbidden.values()} == {32}
+    # Each nonzero source pattern q selects a uniform twelve-bit V q^T.
+    # Summing its forbidden fraction over the eleven patterns gives Phi(()).
+    # A value below one guarantees a completion of the 48 parent coefficients.
     mean = sum(Fraction(len(bad), 1 << len(destinations)) for bad in forbidden.values())
     assert mean == Fraction(11, 128)
     if rebuild:

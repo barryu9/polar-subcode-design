@@ -24,10 +24,14 @@ def read_json(path):
 
 
 def construct(row):
-    """Use only construction parameters, the specified shared profile or published Z."""
+    """Build the payload encoder for one curve from its reference manifest entry."""
     n, payload, method = row["N"], row["payload"], row["method"]
     if method == "published_Z":
         source = read_json(HERE / "reference_inputs" / row["input"])
+        # Row k describes a generator in polar-input coordinates u; bit j is
+        # its entry at physical position j. The rows span the allowed inputs.
+        # Echelon reduction identifies the information positions and expresses
+        # each frozen bit as a sum of earlier information bits (Section II).
         basis = [int(s, 16) for s in source["Z_rows_hex"]]
         if len(basis) != payload:
             raise ValueError("Unexpected precoding matrix dimension")
@@ -36,13 +40,18 @@ def construct(row):
         return PayloadCodec(ebch_subcode(n, payload, row["design_distance"],
                                         int(row["primitive_polynomial"], 16), row["ebn0_db"]))
     if method == "same_profile":
-        # Fig. 10 holds the information set fixed across this PAC comparison.
+        # PAC-SP uses the Fig. 10 Proposed information set before applying
+        # the PAC convolution. This holds I fixed across the two encoders.
         profile = read_json(HERE / "reference_inputs" / row["input"])["profile"]
     else:
         profile = make_profile(n, row["K"], method, payload=payload,
                                ebn0_db=row.get("ebn0_db", 2.0))
     if row["label"].startswith("PAC"):
+        # The taps specify both the dynamic frozen expressions in the mother
+        # code and the convolution mapping the payload to polar-input bits.
         return PayloadCodec(pac_code(n, profile, PAC_TAPS), taps=PAC_TAPS)
+    # CRC curves place payload plus CRC bits in the mother information set.
+    # The decoder tests the CRC on the surviving SCL paths (Section VI).
     return PayloadCodec(PolarSubcode(n, tuple(profile), (0,)*n), int(row["polynomial"],16))
 
 
@@ -57,13 +66,15 @@ def identity(codec):
 
 
 def export(row, directory):
+    """Write the profile and full encoding configuration after matching the curve."""
     codec = construct(row)
     if identity(codec) != row["code_hash"]:
         raise ValueError(f"{row['id']}: regenerated code differs from the FER code")
     prefix = directory / row["id"]
     profile = dict(N=codec.mother.n, K=codec.mother.k, profile=list(codec.mother.profile))
     final = codec.as_dict()
-    # Publish each coefficient once, in the physical-index notation used in Section II.
+    # At frozen position j, a list [i, k] means u_j = u_i + u_k over GF(2).
+    # This is the Section II dynamic frozen expression in physical positions.
     final.pop("columns")
     final["dynamic_expressions"] = {str(j): list(s) for j,s in enumerate(codec.mother.supports) if s}
     for suffix, data in [(".profile.json", profile), (".code.json", final)]:

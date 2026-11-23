@@ -1,8 +1,8 @@
 """Example 8. Complete an N=256 fixed profile and verify the distance witness.
 
-The quick walkthrough takes the historical left directory and three partial
-means as inputs. --recompute-means derives the means from the actual frozen
-expressions and outside errors. --verify-spectrum re-enumerates with the C++
+The default walkthrough reads the critical left inputs and three source-group
+means from the supplied trace. --recompute-means counts the forbidden values
+in the attainable set at each prefix. --verify-spectrum re-enumerates with the C++
 backend (build first via python tools/build_native.py).
 """
 import argparse
@@ -45,6 +45,9 @@ def construct():
     added = {90, 92, 101, 102, 105, 142, 149}
     profile = tuple(sorted((set(base) - removed) | added))
     local = tuple(i - 128 for i in profile if i >= 128)
+    # At target 24, the zero-left branch repeats each right word twice and
+    # therefore requires right distance at least 12. Fix this right code and
+    # the unprecoded left code before choosing any of the 39 x 39 outer entries.
     right = complete_initial_domain(128, local, 12, "lookahead")
     left = PolarSubcode(128, tuple(i for i in profile if i < 128), (0,) * 128)
     inputs, _ = words(left, 23, max_work=500_000_000)
@@ -61,6 +64,9 @@ def construct():
     for source in left.profile:
         state = []
         for u, _ in inputs:
+            # Assign a critical message to the group of its last nonzero
+            # source. Once this column is fixed, later columns cannot change
+            # that message's observation Q_a T m.
             if u.bit_length() - 1 != source:
                 continue
             event = split.constraint(u, 23, materialize=False)
@@ -82,6 +88,9 @@ def construct():
 
         chosen = 0
         for bit in range(len(destinations)):
+            # Each total is the conditional mean for the current source group
+            # after assigning this coefficient. Count distinct forbidden
+            # observations in each child's image and divide by its image size.
             totals = [Fraction(), Fraction()]
             masks = []
             for coords, pivots, bad, offset, rank in state:
@@ -176,9 +185,13 @@ def run(recompute_means=False, verify_spectrum=False, rebuild=False):
     if recompute_means:
         assert means == recorded
     means_used = means if recompute_means else recorded
+    # At source 127 the preceding 38 columns and six entries of this column
+    # are fixed. Theorem 3 counts completions among the remaining 33 bits.
     guaranteed = 2**(f - 6) * (1 - means_used[127])
     assert guaranteed == 354383872
     source = final.profile.index(142)
+    # This right-only message gives the same weight-24 witness for every
+    # outer assignment. Excluding weights 1–23 then establishes equality.
     witness_input = final.input_word(1 << source)
     assert witness_input == (1 << 142) | (1 << 147)
     witness_weight = final.encode(1 << source).bit_count()

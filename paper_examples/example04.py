@@ -6,6 +6,9 @@ from paper_examples.running import printed_bits, support
 
 
 def run():
+    # P acts on the right codeword x_R. Its seven rows correspond to global
+    # frozen positions 8,9,10,11,13,14,15. columns[i] is P's column at local
+    # right-codeword position i, packed as a seven-bit check value.
     checks = check_rows((4,), (0,) * 8)
     columns = [sum(((row >> i) & 1) << k for k, row in enumerate(checks))
                for i in range(8)]
@@ -14,13 +17,16 @@ def run():
         a = polar_transform(u_left, 8)
         inside = support(a)
         outside = [i for i in range(8) if i not in inside]
-        # A row of Q annihilates every inside column. Its kernel therefore
-        # contains all check syndromes attainable by changing the inside bits.
+        # A basis for all checks annihilating the inside columns gives Q_a.
+        # At D=3 the outside bits are zero, so Q_a T m = 0 is exactly the
+        # condition for an inside assignment to realize the chosen residual.
         _, q_rows = solve([(columns[i], 0) for i in inside], 7)
         residuals = Counter()
         for xi in range(4):
             rhs = (columns[inside[0]] if xi & 1 else 0) ^ (columns[inside[1]] if xi & 2 else 0)
             residuals[rhs] += 1
+        # Match Example 3's release of just positions 8 and 9: the other
+        # five residual bits must vanish. n is the number of inside lifts.
         restricted = {printed_bits(rhs, 2): n for rhs, n in residuals.items() if rhs >> 2 == 0}
         label = printed_bits(u_left >> 3, 3)
         summaries[label] = {"inside": inside, "rank": len(q_rows), "residual_counts": restricted}
@@ -40,6 +46,8 @@ def run():
                     rhs ^= columns[pos]
                 if any((row & rhs).bit_count() % 2 for row in q_rows):
                     continue
+                # Undo the projection for this accepted z. Every compatible
+                # inside assignment xi yields one full word (a + x_R, x_R).
                 for xi in range(4):
                     x_right = sum(1 << pos for pos in z)
                     check = 0

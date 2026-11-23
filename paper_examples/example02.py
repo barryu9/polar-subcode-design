@@ -5,6 +5,8 @@ from paper_examples.running import PROFILE, code, support
 
 def run():
     cutoff = 3
+    # i_D is the earliest information row of polar-row weight at most D.
+    # At D=3, a low-weight input must therefore start at source 4 or later.
     first = min(i for i in PROFILE if 2**i.bit_count() <= cutoff)
     assert first == 4
     for b0, c, b1 in product((0, 1), repeat=3):
@@ -18,6 +20,8 @@ def run():
                     assert (family.input_word(msg) & (1 << 3)) == 0
                     low.add(x)
             low_sets.append(low)
+        # Alpha multiplies u3, which vanishes on every such input. Compare
+        # the actual sets of low-weight codewords for the two alpha values.
         assert low_sets[0] == low_sets[1]
     # Set u4=u5=1. Although g5 alone is heavier than D, b1 changes this sum.
     outputs = [support(code(0, 0, 1, b1).encode(0b0110)) for b1 in (0, 1)]

@@ -19,7 +19,9 @@ def main():
     solver, variables, _ = necessary_solver(128, 64, 16, 8)
     proposals = []
     with run.stage("ranked_class_profile_prechecks"):
-        # Only these floor-layer sizes enter the construction queue.
+        # Count the information rows of weight 8 in each tentative profile.
+        # Order profiles by GA cost within each class and screen them with
+        # necessary conditions for the distance-16 target.
         counts = (1, 2)
         for count in counts:
             for bucket in range(8):
@@ -44,7 +46,8 @@ def main():
         if current is None:
             continue
         sources.append(current)
-        # Fixed query counts remove dependence on machine-specific time cutoffs.
+        # Keep the verified code as a candidate. Spectral refinement now holds
+        # its information set fixed and searches for fewer weight-16 codewords.
         for round_index, queries in enumerate((128, 294, 2000), 1):
             current = run.ordered(current, f"core_{index:03d}_{round_index}", "core", queries)
             sources.append(current)

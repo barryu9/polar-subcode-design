@@ -44,6 +44,8 @@ python -m theory.check_results theorem2 proposition3
 
 ## 一键复现仿真码
 
+若想从一条曲线的构造输入开始，读到定义该码的信息集和动态冻结表达式两份 JSON 文件，可先看[复现导读](reproduction/README.zh-CN.md)。
+
 下面最后一条命令在新的输出目录中构造图 5–10 的全部 **30 个码**。若只需某条曲线，可以用 `python -m reproduction list` 查看其编号，再用 `--cases` 指定。
 
 ```bash
@@ -103,6 +105,7 @@ python main.py simulate --support configs/reference/n64_k32_crc4_ga.code.json --
 - 极化码的 GA 构造见 P. Trifonov 的 “Efficient Design and Decoding of Polar Codes”（IEEE Trans. Commun.，2012）。实现中使用的 GA 校验节点近似见 S.-Y. Chung、T. Richardson 和 R. Urbanke 的工作（IEEE Trans. Inf. Theory，2001）。[极化码 GA 构造](https://doi.org/10.1109/TCOMM.2012.081512.110872) · [GA 近似](https://doi.org/10.1109/18.910580)
 - 列表译码见 I. Tal 与 A. Vardy 的 “List Decoding of Polar Codes”（IEEE Trans. Inf. Theory，2015）。PAC 码见 E. Arıkan 的 “From Sequential Decoding to Channel Polarization and Back Again”（IEEE ITS Newsletter，2019）。CRC6、CRC11 和 NR 母码可靠性排序见 ETSI TS 138 212 V19.4.0 的第 5.1 和 5.3.1.2 节。[列表译码](https://doi.org/10.1109/TIT.2015.2410251) · [5G 标准](https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/19.04.00_60/ts_138212v190400p.pdf)
 - SC-ML、RecursCode 和 Number-polar 的预编码矩阵分别见 V. Miloslavskaya 等人发表于 IEEE Trans. Commun. 的三项工作（2020、2021、2024）。[SC-ML](https://doi.org/10.1109/TCOMM.2020.3014946) · [RecursCode](https://doi.org/10.1109/TCOMM.2021.3111625) · [Number-polar](https://doi.org/10.1109/TCOMM.2023.3331532)
+- **参考码原始数据。** Vera Miloslavskaya 提供了 SC-ML、RecursCode 和 Number-polar 的原始码规格文本。对本文使用的七个码，仓库中的 JSON 分别记录了原始文件名、该文件的 SHA-256 摘要和面向 SC 译码的预编码矩阵 $Z$ 的各行。[作者的数据下载页](https://sites.google.com/site/veradmiloslavskaya/specifications-of-error-correcting-codes) · [本文使用的矩阵数据](reproduction/reference_inputs/)
 
 代码与数据来源见[署名说明](NOTICE.md)。
 

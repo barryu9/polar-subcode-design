@@ -40,6 +40,8 @@ python reproduction/proposed.py cold --output runs/table-ii
 
 ## 追踪长度 1024 的变体
 
+要跟着代码读懂图 10 的消融对比，可从主码构造脚本内层循环中的两次调用读起。第一步在每个可编辑的冻结位置，用设计帧上竞争译码前缀的得分选择冻结表达式。第二步将这些表达式与同一信息集上已经细化的后缀组合起来。将组合码同前缀保护前的码比较，就可以在重量不超过 24 的码字集合相同的条件下观察译码表现的变化。[主码构造脚本](examples/reproduce_n1024_k512.py) · [表达式评分](python/design_scl_protected_prefix.py) · [前后缀组合](python/compose_scl_prefix_completion.py)
+
 Proposed-NP 是后缀细化完成、尚未进行前缀保护的中间码。Proposed 在同一后缀上采用保持截断谱的前缀。Proposed-LM 和 Proposed-D32 都从新生成的主码候选 `combined_02_floor16` 继续构造。用 `--cases` 单独选择某个变体时，脚本会自动运行共享阶段。信息位置交换、设计噪声种子和搜索预算可查阅[变体构造脚本](examples/reproduce_n1024_variants.py)。
 
 Proposed-D32 的最后一步保持重量 31 以内的谱。表 II 中的重量 32 码字数来自对匹配码单独进行的完整计数。若要重做该计数，请使用运行日志中[最后一步](python/run_ga_priority_d32_origin_prefix.py)的命令，另选新输出目录，并去掉 `--defer-spectrum-verification`。

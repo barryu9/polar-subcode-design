@@ -15,8 +15,9 @@ def main():
     codes = run.bank(4, profiles=8, layered=True, depth=4, seeds=256, gap=True,
                      full_necessary=True)
     sources = list(codes)
-    # The historical branch was retained after SCL comparison. Re-evaluate a
-    # small fixed design sample instead of loading that selected branch.
+    # Compare all candidates on the same design frames. Rank by frame errors,
+    # then by losses of the transmitted path from the list, and take the first
+    # two into expression refinement. Fig. 9 uses independent noise samples.
     from polar_code.SCL_full_decoder import simulate_awgn_llr_batch
     from run_joint_scl_profile_design import prefix_assessment
     with run.stage("design_sample_scl_selection"):

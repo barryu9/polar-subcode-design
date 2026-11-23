@@ -15,12 +15,18 @@ def main():
     codes = run.bank(5, profiles=3, layered=True, depth=1, focus=2)
     sources = list(codes)
     for index, source in enumerate(codes):
+        # First refine the suffix spectrum. For the selected Fig. 10 design,
+        # this intermediate code is Proposed-NP.
         suffix = run.root / f"suffix_{index:02d}"
         run.call(f"suffix_refinement_{index:02d}", "refine_recursive_suffix_spectrum.py", [
             "--source", source, "--output", suffix, "--target", 24,
             "--suffix-length", 256, "--trials", 200, "--seconds", 14400, "--work", 100000000])
         sources.append(suffix / "code.json")
         for floor in (1, 16):
+            # Design a prefix on the original candidate using SCL design
+            # frames. Compose it with the refined suffix and check the
+            # resulting spectrum through weight 24. This yields candidates
+            # for Proposed on the same information set as their suffix.
             prefix = run.root / f"prefix_{index:02d}_floor{floor}"
             run.call(f"prefix_{index:02d}_{floor}", "design_scl_protected_prefix.py", [
                 "--source", source, "--output", prefix, "--target", 24, "--cutoff", 24,
